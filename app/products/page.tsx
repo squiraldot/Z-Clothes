@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { CaretDown, MagnifyingGlass } from '@phosphor-icons/react';
+import { CaretDown, MagnifyingGlass, X } from '@phosphor-icons/react';
 import { ProductCard } from '@/components/ProductCard';
 import type { Product } from '@/lib/types';
 
@@ -12,8 +12,19 @@ export default function ProductsPage() {
   const [sort, setSort] = useState('Newest');
 
   useEffect(() => {
-    fetch('/api/products').then((r) => r.json()).then(setProducts);
+    const params = new URLSearchParams(window.location.search);
+    const search = params.get('search');
+    const legacyQuery = params.get('q');
+    setQ(search || legacyQuery || '');
+    fetch('/api/products').then((r) => r.json()).then((data) => setProducts(Array.isArray(data) ? data : []));
   }, []);
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (q) url.searchParams.set('search', q);
+    else url.searchParams.delete('search');
+    window.history.replaceState({}, '', url.toString());
+  }, [q]);
 
   const cats = ['All', ...Array.from(new Set(products.map((p) => p.category).filter(Boolean)))];
 
@@ -21,7 +32,7 @@ export default function ProductsPage() {
     const result = products.filter(
       (p) =>
         (category === 'All' || p.category === category) &&
-        `${p.title} ${p.category}`.toLowerCase().includes(q.toLowerCase()),
+        `${p.title} ${p.category} ${p.description}`.toLowerCase().includes(q.toLowerCase()),
     );
 
     return [...result].sort((a, b) => {
@@ -39,7 +50,7 @@ export default function ProductsPage() {
         <div className="products-hero-copy">
           <span className="eyebrow">THE FULL EDIT</span>
           <h1>All Products</h1>
-          <p>Discover our complete collection of premium clothing.</p>
+          <p>{q ? `Showing results for “${q}”.` : 'Discover our complete collection of premium clothing.'}</p>
         </div>
       </section>
 
@@ -47,20 +58,19 @@ export default function ProductsPage() {
         <div className="catalog-topline">
           <div>
             <span className="catalog-count">{filtered.length} PRODUCTS</span>
-            <h2>Shop the collection</h2>
+            <h2>{q ? 'Search results' : 'Shop the collection'}</h2>
           </div>
           <label className="catalog-search">
             <MagnifyingGlass size={17} />
             <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search for clothes..." aria-label="Search products" />
+            {q && <button type="button" className="search-clear" onClick={()=>setQ('')} aria-label="Clear search"><X size={15}/></button>}
           </label>
         </div>
 
         <div className="category-bar">
           <div className="category-scroll" aria-label="Product categories">
             {cats.map((c) => (
-              <button className={category === c ? 'category-pill active' : 'category-pill'} onClick={() => setCategory(c)} key={c}>
-                {c}
-              </button>
+              <button className={category === c ? 'category-pill active' : 'category-pill'} onClick={() => setCategory(c)} key={c}>{c}</button>
             ))}
           </div>
 
@@ -78,13 +88,11 @@ export default function ProductsPage() {
         <div className="mobile-search">
           <MagnifyingGlass size={17} />
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search for clothes..." aria-label="Search products" />
+          {q && <button type="button" className="search-clear" onClick={()=>setQ('')} aria-label="Clear search"><X size={15}/></button>}
         </div>
 
-        <div className="product-grid">
-          {filtered.map((p) => <ProductCard key={p.id} p={p} />)}
-        </div>
-
-        {filtered.length === 0 && <div className="empty">No products match that search.</div>}
+        <div className="product-grid">{filtered.map((p) => <ProductCard key={p.id} p={p} />)}</div>
+        {filtered.length === 0 && <div className="empty"><p>No products match that search.</p>{q && <button className="drawer-link" onClick={()=>setQ('')}>Clear search →</button>}</div>}
       </section>
     </main>
   );
