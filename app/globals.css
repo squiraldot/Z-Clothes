@@ -210,3 +210,25 @@
 .wishlist-empty p{color:var(--muted);font-size:12px;line-height:1.7;margin:0 auto 22px}
 .wishlist-grid{margin-top:20px}
 @media(max-width:700px){.wishlist-empty{padding:65px 18px}.wishlist-empty h2{font-size:34px}}
+
+
+/* Phase 4 — immersive 3D direction */
+.hero-immersive{isolation:isolate;perspective:1200px}
+.hero-immersive .hero-media{transition:transform .18s ease-out;will-change:transform}
+.hero-layer-back{z-index:0}
+.hero-layer-front{z-index:4}
+.hero-noise{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");mix-blend-mode:screen}
+.hero-orbit{position:absolute;z-index:2;border:1px solid rgba(255,255,255,.28);border-radius:50%;display:grid;place-items:center;color:rgba(255,255,255,.75);font-family:Georgia,serif;pointer-events:none;box-shadow:0 0 80px rgba(255,255,255,.04) inset}
+.orbit-one{width:230px;height:230px;right:10vw;top:16%;animation:orbitFloat 7s ease-in-out infinite}
+.orbit-two{width:92px;height:92px;right:27vw;bottom:18%;font:10px Arial,sans-serif;letter-spacing:.2em;animation:orbitFloat 5s ease-in-out infinite reverse}
+.orbit-one span{font-size:82px;font-weight:400;opacity:.75}
+.hero-scroll{position:absolute;right:5vw;bottom:28px;z-index:5;font-size:8px;letter-spacing:.2em;color:rgba(255,255,255,.65);writing-mode:vertical-rl;display:flex;gap:10px;align-items:center}
+.hero-scroll span{font-size:14px}
+@keyframes orbitFloat{0%,100%{margin-top:0;transform:rotate(0deg)}50%{margin-top:-12px;transform:rotate(5deg)}}
+.product-card{transform-style:preserve-3d;transition:transform .35s ease,box-shadow .35s ease}
+.product-card:hover{transform:translateY(-5px)}
+.category-card{transform-style:preserve-3d}
+.category-card:after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.12),transparent 35%,rgba(0,0,0,.18));pointer-events:none;opacity:.7}
+@media(max-width:900px){.orbit-one{width:170px;height:170px;right:4vw;top:22%}.orbit-one span{font-size:62px}.orbit-two{right:24vw}}
+@media(max-width:560px){.hero-scroll{display:none}.orbit-one{width:105px;height:105px;right:7vw;top:13%;opacity:.55}.orbit-one span{font-size:42px}.orbit-two{display:none}}
+@media(prefers-reduced-motion:reduce){.orbit-one,.orbit-two{animation:none}.hero-immersive .hero-media,.hero-immersive .hero-copy{transform:none!important}}
