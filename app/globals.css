@@ -203,3 +203,10 @@
   .header-search-field>button{width:40px;height:40px}
   .account-modal-card h2{font-size:32px}
 }
+
+.wishlist-empty{text-align:center;padding:90px 20px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.wishlist-empty svg{margin-bottom:10px}
+.wishlist-empty h2{font-family:Georgia,serif;font-weight:400;font-size:40px;margin:8px 0}
+.wishlist-empty p{color:var(--muted);font-size:12px;line-height:1.7;margin:0 auto 22px}
+.wishlist-grid{margin-top:20px}
+@media(max-width:700px){.wishlist-empty{padding:65px 18px}.wishlist-empty h2{font-size:34px}}
