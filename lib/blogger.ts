@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import type { Product } from './types';
 import { demoProducts } from './demo-products';
 
@@ -22,7 +23,7 @@ export function parsePost(post: any): Product {
   return { id: post.id, slug, title: post.title, description: meta(html,'description') || text(html).slice(0,220), price, compareAtPrice: compareAt || undefined, currency: meta(html,'currency') || 'INR', category, labels, image: imgs[0] || 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85', images: imgs.slice(0,6), sizes, colors, dodoProductId, url: post.url, published: post.published, contentHtml: html };
 }
 
-export async function getProducts(): Promise<Product[]> {
+export const getProducts = cache(async (): Promise<Product[]> => {
   const blogId = process.env.BLOGGER_BLOG_ID;
   const key = process.env.BLOGGER_API_KEY;
   if (!blogId || !key) return demoProducts;
@@ -30,16 +31,16 @@ export async function getProducts(): Promise<Product[]> {
   const posts:any[] = [];
   do {
     const url = `${API}/blogs/${encodeURIComponent(blogId)}/posts?key=${encodeURIComponent(key)}&fetchBodies=true&fetchImages=true&maxResults=50&orderBy=published&status=live${pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : ''}`;
-    const res = await fetch(url, { next: { revalidate: 60 } });
+    const res = await fetch(url, { next: { revalidate: 60, tags: ['zclothes-products'] } });
     if (!res.ok) throw new Error(`Blogger API failed: ${res.status}`);
     const data = await res.json();
     posts.push(...(data.items ?? []));
     pageToken = data.nextPageToken || '';
   } while (pageToken && posts.length < 500);
   return posts.map(parsePost);
-}
+});
 
-export async function getProduct(slug: string) {
+export const getProduct = cache(async (slug: string) => {
   const products = await getProducts();
   return products.find(p=>p.slug===slug || p.id===slug);
-}
+});
