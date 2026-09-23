@@ -232,3 +232,15 @@
 @media(max-width:900px){.orbit-one{width:170px;height:170px;right:4vw;top:22%}.orbit-one span{font-size:62px}.orbit-two{right:24vw}}
 @media(max-width:560px){.hero-scroll{display:none}.orbit-one{width:105px;height:105px;right:7vw;top:13%;opacity:.55}.orbit-one span{font-size:42px}.orbit-two{display:none}}
 @media(prefers-reduced-motion:reduce){.orbit-one,.orbit-two{animation:none}.hero-immersive .hero-media,.hero-immersive .hero-copy{transform:none!important}}
+
+/* Phase 5 — production polish */
+.loading-page{min-height:70vh;display:grid;place-items:center;align-content:center;gap:14px;text-align:center}
+.loading-mark{width:64px;height:64px;border:1px solid var(--ink);border-radius:50%;display:grid;place-items:center;font-family:Georgia,serif;font-size:30px;animation:loadingPulse 1.5s ease-in-out infinite}
+.loading-page p{font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+@keyframes loadingPulse{0%,100%{transform:scale(.94);opacity:.55}50%{transform:scale(1);opacity:1}}
+.error-page h1{max-width:650px;margin-left:auto;margin-right:auto}
+.error-page p{max-width:440px;margin-left:auto;margin-right:auto;color:var(--muted);line-height:1.7}
+.error-actions{display:flex;justify-content:center;gap:10px;margin-top:22px}
+.btn.outline{border-color:#111;background:transparent;color:#111}
+@media(max-width:560px){.error-actions{flex-direction:column;align-items:stretch}.error-actions .btn{justify-content:center}}
+@media(prefers-reduced-motion:reduce){.loading-mark{animation:none}}
