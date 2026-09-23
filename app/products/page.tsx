@@ -10,12 +10,14 @@ export default function ProductsPage() {
   const [q, setQ] = useState('');
   const [category, setCategory] = useState('All');
   const [sort, setSort] = useState('Newest');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     setQ(params.get('search') || params.get('q') || '');
     setCategory(params.get('category') || 'All');
-    fetch('/api/products').then((r) => r.json()).then((data) => setProducts(Array.isArray(data) ? data : []));
+    fetch('/api/products').then((r) => { if (!r.ok) throw new Error('Product request failed'); return r.json(); }).then((data) => setProducts(Array.isArray(data) ? data : [])).catch(() => setError(true)).finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
@@ -60,7 +62,7 @@ export default function ProductsPage() {
           <label className="sort-control"><span>Sort by</span><select value={sort} onChange={(e)=>setSort(e.target.value)} aria-label="Sort products"><option>Newest</option><option>Price: Low</option><option>Price: High</option></select><CaretDown size={14}/></label>
         </div>
         <div className="mobile-search"><MagnifyingGlass size={17}/><input value={q} onChange={(e)=>setQ(e.target.value)} placeholder="Search for clothes..." aria-label="Search products"/>{q&&<button type="button" className="search-clear" onClick={()=>setQ('')} aria-label="Clear search"><X size={15}/></button>}</div>
-        <div className="product-grid">{filtered.map((p)=><ProductCard key={p.id} p={p}/>)}</div>
+        {error ? <div className="empty error-inline"><p>We could not load the collection right now.</p><button className="drawer-link" onClick={()=>window.location.reload()}>Try again →</button></div> : loading ? <div className="catalog-loading" aria-live="polite">Loading the collection…</div> : <div className="product-grid">{filtered.map((p)=><ProductCard key={p.id} p={p}/>)}</div>}
         {filtered.length===0&&<div className="empty"><p>No products match this edit.</p>{(q||category!=='All')&&<button className="drawer-link" onClick={()=>{setQ('');setCategory('All')}}>Reset filters →</button>}</div>}
       </section>
     </main>
