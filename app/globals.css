@@ -63,3 +63,29 @@
   .tag{left:7px;top:7px;padding:5px 6px;font-size:7px}
   .wish{right:7px;top:7px;width:25px;height:25px;line-height:24px;font-size:12px}
 }
+
+/* Brand system */
+:root{--ink:#10100f;--cream:#f2eee6;--paper:#fbfaf7;--line:#d9d4ca;--muted:#6e6a62;--accent:#d7bd95}
+::selection{background:#111;color:#fff}
+.brand{display:inline-flex;align-items:center;gap:10px;font-family:Georgia,serif;letter-spacing:.08em;font-size:20px}
+.brand-mark{display:inline-grid;place-items:center;width:31px;height:31px;border:1px solid #6e6b65;border-radius:50%;font-family:Georgia,serif;font-size:16px;line-height:1}
+.brand-word{letter-spacing:.14em}
+.site-header{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.site-header .brand{transition:opacity .2s,transform .2s}
+.site-header .brand:hover{opacity:.9;transform:translateY(-1px)}
+.nav a{position:relative}
+.nav a:after{content:"";position:absolute;left:0;right:100%;bottom:-7px;height:1px;background:#fff;transition:right .25s}
+.nav a:hover:after{right:0}
+.header-actions button,.header-actions a{transition:opacity .2s,transform .2s}
+.header-actions button:hover,.header-actions a:hover{opacity:.72;transform:translateY(-1px)}
+.footer-brand{color:#fff}
+.footer-brand-block p{max-width:300px}
+.footer-signature{display:inline-block;margin-top:22px;font-size:9px;letter-spacing:.2em;color:#6f6b64}
+.footer h4{margin-top:0}
+@media(max-width:560px){
+  .site-header{height:68px}
+  .site-header .brand{font-size:16px;gap:7px}
+  .brand-mark{width:27px;height:27px;font-size:14px}
+  .brand-word{letter-spacing:.11em}
+  .nav{top:68px}
+}
