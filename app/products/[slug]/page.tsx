@@ -38,7 +38,13 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     category: p.category,
     sku: p.id,
     brand: { '@type': 'Brand', name: 'Z-Clothes' },
-    offers: { '@type': 'Offer', priceCurrency: p.currency || 'INR', price: p.price, availability: 'https://schema.org/InStock', url: `${SITE}/products/${p.slug}` },
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: p.currency || 'INR',
+      price: p.price,
+      availability: 'https://schema.org/InStock',
+      url: `${SITE}/products/${p.slug}`,
+    },
   };
 
   return (
@@ -48,8 +54,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <div className="product-info">
         <span className="eyebrow dark">{p.category}</span>
         <h1>{p.title}</h1>
-        <div className="rating" aria-label="Rated 4.8 out of 5"><span className="stars">★★★★★</span><span>4.8 · 120 reviews</span></div>
-        <div className="price">₹{p.price.toLocaleString('en-IN')} {p.compareAtPrice&&<del>₹{p.compareAtPrice.toLocaleString('en-IN')}</del>}</div>
+        <div className="price">₹{p.price.toLocaleString('en-IN')} {p.compareAtPrice && <del>₹{p.compareAtPrice.toLocaleString('en-IN')}</del>}</div>
         <p className="lead">{p.description}</p>
         <ProductPurchase product={p} />
         <div className="service-grid"><span>◈<b>Free Shipping</b><small>Across India</small></span><span>◇<b>Payments</b><small>Launching soon</small></span><span>○<b>Easy Returns</b><small>Within 7 days</small></span></div>
