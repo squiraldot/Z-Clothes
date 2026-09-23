@@ -171,3 +171,35 @@
   .cart-row>strong{grid-column:2;text-align:left}
   .cart-row img{width:76px;height:98px}
 }
+
+
+/* Phase 3 — discovery, wishlist, variants, and gallery */
+.header-modal{position:fixed;inset:0;z-index:140;background:rgba(251,250,247,.97);backdrop-filter:blur(18px);display:grid;place-items:center;padding:30px}
+.header-modal-close{position:absolute;right:28px;top:24px;border:0;background:none;cursor:pointer;color:#111}
+.header-search-form{width:min(760px,100%);margin-top:-6vh}
+.header-search-field{display:flex;align-items:center;gap:15px;border-bottom:1px solid #111;padding:18px 0;margin-top:22px}
+.header-search-field>svg{color:var(--muted)}
+.header-search-field input{border:0;outline:0;background:transparent;flex:1;font-family:Georgia,serif;font-size:clamp(30px,5vw,56px);font-weight:400;color:#111;min-width:0}
+.header-search-field>button{border:0;background:#111;color:#fff;width:44px;height:44px;display:grid;place-items:center;cursor:pointer}
+.search-suggestions{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.search-suggestions button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 13px;font-size:9px;text-transform:uppercase;letter-spacing:.08em;cursor:pointer}
+.account-modal-card{width:min(470px,100%);background:#fff;border:1px solid var(--line);padding:42px;text-align:center;box-shadow:0 25px 80px rgba(0,0,0,.12)}
+.account-modal-card h2{font-family:Georgia,serif;font-weight:400;font-size:38px;line-height:1;margin:15px 0}
+.account-modal-card p{color:var(--muted);line-height:1.7;font-size:12px;margin:0 auto 24px;max-width:330px}
+.search-clear{border:0!important;background:transparent!important;color:var(--muted);cursor:pointer;display:grid;place-items:center;padding:0!important;width:24px!important;height:24px!important}
+.drawer-variant,.cart-variant{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:-5px 0 12px}
+.quick-add.added,.add-cart.added{background:#111;color:#fff}
+.thumb-row{gap:8px}
+.thumb-button{padding:0;border:1px solid transparent;background:transparent;cursor:pointer;flex:0 0 auto}
+.thumb-button.active{border-color:#111}
+.thumb-button img{display:block}
+@media(max-width:700px){
+  .header-modal{padding:22px}
+  .header-modal-close{right:18px;top:17px}
+  .account-modal-card{padding:34px 24px}
+}
+@media(max-width:560px){
+  .header-search-field input{font-size:32px}
+  .header-search-field>button{width:40px;height:40px}
+  .account-modal-card h2{font-size:32px}
+}
