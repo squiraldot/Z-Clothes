@@ -1,20 +1,21 @@
 'use client';
 
 import Link from 'next/link';
-import { MagnifyingGlass, UserCircle, ShoppingBag, List, X } from '@phosphor-icons/react';
+import { MagnifyingGlass, UserCircle, ShoppingBag, List, X, ArrowRight } from '@phosphor-icons/react';
 import { useEffect, useState } from 'react';
 import { CartDrawer } from '@/components/CartDrawer';
+import { readCart } from '@/lib/shop';
 
 export function Header() {
   const [open, setOpen] = useState(false);
   const [bagOpen, setBagOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
   const [count, setCount] = useState(0);
+  const [query, setQuery] = useState('');
 
   function syncCount() {
-    try {
-      const items = JSON.parse(localStorage.getItem('zclothes-cart') || '[]');
-      setCount(items.reduce((sum: number, item: any) => sum + Number(item.quantity || 0), 0));
-    } catch { setCount(0); }
+    setCount(readCart().reduce((sum, item) => sum + Number(item.quantity || 0), 0));
   }
 
   useEffect(() => {
@@ -27,6 +28,18 @@ export function Header() {
       window.removeEventListener('storage', handler);
     };
   }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = searchOpen || accountOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [searchOpen, accountOpen]);
+
+  function submitSearch(event: React.FormEvent) {
+    event.preventDefault();
+    const value = query.trim();
+    window.location.href = value ? `/products?search=${encodeURIComponent(value)}` : '/products';
+    setSearchOpen(false);
+  }
 
   return (
     <>
@@ -42,15 +55,45 @@ export function Header() {
           <Link href="/policies" onClick={()=>setOpen(false)}>Policies</Link>
         </nav>
         <div className="header-actions">
-          <button aria-label="Search"><MagnifyingGlass size={20}/></button>
-          <button aria-label="Account"><UserCircle size={21}/></button>
+          <button aria-label="Search" onClick={()=>setSearchOpen(true)}><MagnifyingGlass size={20}/></button>
+          <button aria-label="Account" onClick={()=>setAccountOpen(true)}><UserCircle size={21}/></button>
           <button className="bag-button" onClick={()=>setBagOpen(true)} aria-label={`Shopping bag, ${count} items`}>
             <ShoppingBag size={20}/>{count>0&&<span className="cart-dot">{count>99?'99+':count}</span>}
           </button>
           <button className="menu-btn" onClick={()=>setOpen(!open)} aria-label={open?'Close menu':'Open menu'}>{open?<X size={22}/>:<List size={22}/>}</button>
         </div>
       </header>
+
       <CartDrawer open={bagOpen} onClose={()=>setBagOpen(false)} />
+
+      {searchOpen && (
+        <div className="header-modal" role="dialog" aria-modal="true" aria-label="Search Z-Clothes">
+          <button className="header-modal-close" onClick={()=>setSearchOpen(false)} aria-label="Close search"><X size={24}/></button>
+          <form className="header-search-form" onSubmit={submitSearch}>
+            <span className="eyebrow dark">SEARCH Z-CLOTHES</span>
+            <div className="header-search-field">
+              <MagnifyingGlass size={25}/>
+              <input autoFocus value={query} onChange={(e)=>setQuery(e.target.value)} placeholder="Search tees, hoodies, jackets..." />
+              <button type="submit" aria-label="Submit search"><ArrowRight size={22}/></button>
+            </div>
+            <div className="search-suggestions">
+              {['T-Shirts','Hoodies','Jackets','Cargo Pants'].map((term)=><button key={term} type="button" onClick={()=>{setQuery(term);window.location.href=`/products?search=${encodeURIComponent(term)}`}}>{term}</button>)}
+            </div>
+          </form>
+        </div>
+      )}
+
+      {accountOpen && (
+        <div className="header-modal" role="dialog" aria-modal="true" aria-label="Account">
+          <button className="header-modal-close" onClick={()=>setAccountOpen(false)} aria-label="Close account"><X size={24}/></button>
+          <div className="account-modal-card">
+            <span className="eyebrow dark">Z-CLOTHES ACCOUNT</span>
+            <h2>Your account is coming soon.</h2>
+            <p>For now, keep your bag saved in this browser and shop without signing in.</p>
+            <button className="btn dark" onClick={()=>setAccountOpen(false)}>Continue shopping</button>
+          </div>
+        </div>
+      )}
     </>
   );
 }
