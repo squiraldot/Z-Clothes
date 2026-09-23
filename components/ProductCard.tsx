@@ -2,31 +2,33 @@
 
 import Link from 'next/link';
 import { Heart, Plus } from '@phosphor-icons/react';
-import { useState } from 'react';
+import { useEffect, useState, type MouseEvent } from 'react';
 import type { Product } from '@/lib/types';
+import { addToCart, readWishlist, toggleWishlist } from '@/lib/shop';
 
 export function ProductCard({ p }: { p: Product }) {
   const [liked, setLiked] = useState(false);
+  const [added, setAdded] = useState(false);
 
-  function quickAdd(event: React.MouseEvent) {
+  useEffect(() => {
+    setLiked(readWishlist().includes(p.id));
+    const handler = () => setLiked(readWishlist().includes(p.id));
+    window.addEventListener('zclothes:wishlist-updated', handler);
+    return () => window.removeEventListener('zclothes:wishlist-updated', handler);
+  }, [p.id]);
+
+  function quickAdd(event: MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
     event.stopPropagation();
-
-    const current = JSON.parse(localStorage.getItem('zclothes-cart') || '[]');
-    const existing = current.find((x: any) => x.productId === p.id);
-    if (existing) existing.quantity += 1;
-    else current.push({
-      productId: p.id, title: p.title, price: p.price, image: p.image,
-      quantity: 1, dodoProductId: p.dodoProductId || '',
-    });
-    localStorage.setItem('zclothes-cart', JSON.stringify(current));
-    window.dispatchEvent(new CustomEvent('zclothes:cart-updated'));
+    addToCart(p);
+    setAdded(true);
+    window.setTimeout(() => setAdded(false), 1400);
   }
 
-  function toggleWishlist(event: React.MouseEvent) {
+  function toggleLike(event: MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
     event.stopPropagation();
-    setLiked((value) => !value);
+    setLiked(toggleWishlist(p.id).includes(p.id));
   }
 
   return (
@@ -35,12 +37,12 @@ export function ProductCard({ p }: { p: Product }) {
         <img src={p.image} alt={p.title} />
         {p.images?.[0] && <img className="product-hover-image" src={p.images[0]} alt="" aria-hidden="true" />}
         {p.labels[0] && <span className="tag">{p.labels[0]}</span>}
-        <button className={liked ? 'wish liked' : 'wish'} onClick={toggleWishlist} aria-label={liked ? 'Remove from wishlist' : 'Add to wishlist'}>
+        <button className={liked ? 'wish liked' : 'wish'} onClick={toggleLike} aria-label={liked ? 'Remove from wishlist' : 'Add to wishlist'}>
           <Heart size={16} weight={liked ? 'fill' : 'regular'} />
         </button>
-        <button className="quick-add" onClick={quickAdd} aria-label={`Quick add ${p.title}`}>
+        <button className={added ? 'quick-add added' : 'quick-add'} onClick={quickAdd} aria-label={`Quick add ${p.title}`}>
           <Plus size={16} />
-          <span>Quick add</span>
+          <span>{added ? 'Added to bag' : 'Quick add'}</span>
         </button>
       </div>
       <div className="product-meta">
