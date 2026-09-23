@@ -38,7 +38,7 @@ export function BuyButton({ product }: { product: Product }) {
 
   function add() {
     addItem(product);
-    window.location.href = '/checkout';
+    window.dispatchEvent(new CustomEvent('zclothes:cart-updated'));
   }
 
   function buy() {
@@ -50,7 +50,7 @@ export function BuyButton({ product }: { product: Product }) {
     <>
       <div className="buy-stack">
         <button className="add-cart" onClick={add}>
-          Add to Cart
+          Add to Bag
         </button>
 
         <button className="dodo-btn" onClick={buy}>
