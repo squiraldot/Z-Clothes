@@ -1,0 +1,2 @@
+import Link from 'next/link'; import type { Product } from '@/lib/types';
+export function ProductCard({p}:{p:Product}){return <Link href={`/products/${p.slug}`} className="product-card"><div className="product-image"><img src={p.image} alt={p.title}/>{p.labels[0]&&<span className="tag">{p.labels[0]}</span>}<span className="wish">♡</span></div><div className="product-meta"><div><h3>{p.title}</h3><p>{p.category}</p></div><strong>₹{p.price.toLocaleString('en-IN')}</strong></div></Link>}
