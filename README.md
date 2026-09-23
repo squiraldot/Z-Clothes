@@ -28,9 +28,9 @@ The site reads published posts from Blogger API v3, so **1 Blogger post = 1 prod
 
 Copy `.env.example` to `.env.local` and add the values from Google Cloud/Blogger and Dodo Payments.
 
-## Dodo setup
+## Payment status
 
-Create matching products in Dodo Payments and place each Dodo product ID in the Blogger post's `data-dodo-product-id`. The app creates a Dodo Checkout Session server-side and redirects the customer to Dodo. Configure the Dodo webhook URL as `/api/webhook` after deployment and add `DODO_PAYMENTS_WEBHOOK_KEY`.
+Dodo Payments integration is prepared in the codebase but intentionally **disabled in the live customer flow** until verification is complete. The current Buy Now and checkout actions show a confirmation state instead of collecting payment.
 
 ## Run
 
