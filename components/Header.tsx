@@ -34,9 +34,21 @@ export function Header() {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = searchOpen || accountOpen ? 'hidden' : '';
+    document.body.style.overflow = searchOpen || accountOpen || bagOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
-  }, [searchOpen, accountOpen]);
+  }, [searchOpen, accountOpen, bagOpen]);
+
+  useEffect(() => {
+    if (!(searchOpen || accountOpen || open)) return;
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key !== 'Escape') return;
+      if (searchOpen) setSearchOpen(false);
+      if (accountOpen) setAccountOpen(false);
+      if (open) setOpen(false);
+    }
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [searchOpen, accountOpen, open]);
 
   function submitSearch(event: FormEvent) {
     event.preventDefault();
@@ -51,7 +63,7 @@ export function Header() {
         <Link href="/" className="brand" aria-label="Z-Clothes home">
           <span className="brand-mark">Z</span><span className="brand-word">Z-CLOTHES</span>
         </Link>
-        <nav className={open ? 'nav open' : 'nav'} aria-label="Main navigation">
+        <nav id="primary-navigation" className={open ? 'nav open' : 'nav'} aria-label="Main navigation">
           <Link href="/" onClick={()=>setOpen(false)}>Home</Link>
           <Link href="/products" onClick={()=>setOpen(false)}>Shop</Link>
           <Link href="/about" onClick={()=>setOpen(false)}>About</Link>
@@ -69,7 +81,7 @@ export function Header() {
             <ShoppingBag size={20}/>
             {count > 0 && <span className="cart-dot">{count > 99 ? '99+' : count}</span>}
           </button>
-          <button className="menu-btn" onClick={()=>setOpen(!open)} aria-label={open ? 'Close menu' : 'Open menu'}>
+          <button className="menu-btn" onClick={()=>setOpen(!open)} aria-expanded={open} aria-controls="primary-navigation" aria-label={open ? 'Close menu' : 'Open menu'}>
             {open ? <X size={22}/> : <List size={22}/>}
           </button>
         </div>
@@ -78,10 +90,10 @@ export function Header() {
       <CartDrawer open={bagOpen} onClose={()=>setBagOpen(false)} />
 
       {searchOpen && (
-        <div className="header-modal" role="dialog" aria-modal="true" aria-label="Search Z-Clothes">
+        <div className="header-modal" role="dialog" aria-modal="true" aria-labelledby="search-title">
           <button className="header-modal-close" onClick={()=>setSearchOpen(false)} aria-label="Close search"><X size={24}/></button>
           <form className="header-search-form" onSubmit={submitSearch}>
-            <span className="eyebrow dark">SEARCH Z-CLOTHES</span>
+            <span id="search-title" className="eyebrow dark">SEARCH Z-CLOTHES</span>
             <div className="header-search-field">
               <MagnifyingGlass size={25}/>
               <input autoFocus value={query} onChange={(e)=>setQuery(e.target.value)} placeholder="Search tees, hoodies, jackets..." />
@@ -99,10 +111,10 @@ export function Header() {
       )}
 
       {accountOpen && (
-        <div className="header-modal" role="dialog" aria-modal="true" aria-label="Account">
+        <div className="header-modal" role="dialog" aria-modal="true" aria-labelledby="account-title">
           <button className="header-modal-close" onClick={()=>setAccountOpen(false)} aria-label="Close account"><X size={24}/></button>
           <div className="account-modal-card">
-            <span className="eyebrow dark">Z-CLOTHES ACCOUNT</span>
+            <span id="account-title" className="eyebrow dark">Z-CLOTHES ACCOUNT</span>
             <h2>Your account is coming soon.</h2>
             <p>For now, keep your bag saved in this browser and shop without signing in.</p>
             <button className="btn dark" onClick={()=>setAccountOpen(false)}>Continue shopping</button>
