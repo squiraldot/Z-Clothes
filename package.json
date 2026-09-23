@@ -9,12 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@dodopayments/nextjs": "latest",
     "@phosphor-icons/react": "latest",
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest",
-    "dodopayments": "latest"
+    "react-dom": "latest"
   },
   "devDependencies": {
     "@types/node": "latest",
