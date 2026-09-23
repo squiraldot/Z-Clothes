@@ -2,15 +2,13 @@
 
 import { Minus, Plus, Trash, X } from '@phosphor-icons/react';
 import { useEffect, useMemo, useState } from 'react';
-
-type CartItem = { productId:string; title:string; price:number; image:string; quantity:number; dodoProductId:string };
+import { cartItemKey, readCart, writeCart, type CartItem } from '@/lib/shop';
 
 export function CartDrawer({ open, onClose }: { open:boolean; onClose:()=>void }) {
   const [items, setItems] = useState<CartItem[]>([]);
 
   function load() {
-    try { setItems(JSON.parse(localStorage.getItem('zclothes-cart') || '[]')); }
-    catch { setItems([]); }
+    setItems(readCart());
   }
 
   useEffect(() => {
@@ -30,15 +28,18 @@ export function CartDrawer({ open, onClose }: { open:boolean; onClose:()=>void }
 
   function save(next:CartItem[]) {
     setItems(next);
-    localStorage.setItem('zclothes-cart', JSON.stringify(next));
-    window.dispatchEvent(new CustomEvent('zclothes:cart-updated'));
+    writeCart(next);
   }
 
-  function change(id:string, delta:number) {
-    save(items.map(x => x.productId === id ? {...x, quantity:Math.max(1, x.quantity + delta)} : x));
+  function change(item:CartItem, delta:number) {
+    save(items.map((x) => cartItemKey(x) === cartItemKey(item)
+      ? {...x, quantity:Math.max(1, x.quantity + delta)}
+      : x));
   }
 
-  function remove(id:string) { save(items.filter(x => x.productId !== id)); }
+  function remove(item:CartItem) {
+    save(items.filter((x) => cartItemKey(x) !== cartItemKey(item)));
+  }
 
   return (
     <>
@@ -58,13 +59,14 @@ export function CartDrawer({ open, onClose }: { open:boolean; onClose:()=>void }
               <button className="drawer-link" onClick={onClose}>Continue shopping →</button>
             </div>
           ) : items.map(item => (
-            <div className="drawer-item" key={item.productId}>
+            <div className="drawer-item" key={cartItemKey(item)}>
               <img src={item.image} alt="" />
               <div className="drawer-item-info">
-                <div className="drawer-item-top"><h3>{item.title}</h3><button onClick={()=>remove(item.productId)} aria-label="Remove item"><Trash size={15}/></button></div>
+                <div className="drawer-item-top"><h3>{item.title}</h3><button onClick={()=>remove(item)} aria-label={`Remove ${item.title}`}><Trash size={15}/></button></div>
                 <p>₹{item.price.toLocaleString('en-IN')}</p>
+                {(item.color || item.size) && <div className="drawer-variant">{[item.color, item.size].filter(Boolean).join(' · ')}</div>}
                 <div className="drawer-item-bottom">
-                  <div className="qty"><button onClick={()=>change(item.productId,-1)} aria-label="Decrease"><Minus size={12}/></button><span>{item.quantity}</span><button onClick={()=>change(item.productId,1)} aria-label="Increase"><Plus size={12}/></button></div>
+                  <div className="qty"><button onClick={()=>change(item,-1)} aria-label="Decrease"><Minus size={12}/></button><span>{item.quantity}</span><button onClick={()=>change(item,1)} aria-label="Increase"><Plus size={12}/></button></div>
                   <strong>₹{(item.price*item.quantity).toLocaleString('en-IN')}</strong>
                 </div>
               </div>
