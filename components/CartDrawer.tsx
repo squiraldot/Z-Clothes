@@ -9,6 +9,15 @@ export function CartDrawer({ open, onClose }: { open:boolean; onClose:()=>void }
   const [items, setItems] = useState<CartItem[]>([]);
   useEffect(() => { setItems(readCart()); const handler=()=>setItems(readCart()); window.addEventListener('zclothes:cart-updated',handler); return()=>window.removeEventListener('zclothes:cart-updated',handler); }, []);
   useEffect(() => { document.body.style.overflow=open?'hidden':''; return()=>{document.body.style.overflow=''}; }, [open]);
+  useEffect(() => {
+    if (!open) return;
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') onClose();
+    }
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [open, onClose]);
+
   const total=useMemo(()=>items.reduce((sum,x)=>sum+x.price*x.quantity,0),[items]);
   const count=items.reduce((sum,x)=>sum+x.quantity,0);
   function save(next:CartItem[]){setItems(next);writeCart(next)}
