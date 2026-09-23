@@ -1,15 +1,25 @@
 'use client';
-import Link from 'next/link'; import { useEffect, useMemo, useState } from 'react';
+
+import Link from 'next/link';
+import { CheckCircle, Minus, Plus, Trash, X } from '@phosphor-icons/react';
+import { useEffect, useMemo, useState } from 'react';
 
 type CartItem={productId:string;title:string;price:number;image:string;quantity:number;dodoProductId:string};
+
 export default function Checkout(){
- const [items,setItems]=useState<CartItem[]>([]); const [busy,setBusy]=useState(false);
+ const [items,setItems]=useState<CartItem[]>([]);
+ const [showSuccess,setShowSuccess]=useState(false);
  useEffect(()=>{try{setItems(JSON.parse(localStorage.getItem('zclothes-cart')||'[]'))}catch{setItems([])}},[]);
  const total=useMemo(()=>items.reduce((s,x)=>s+x.price*x.quantity,0),[items]);
- function remove(id:string){const next=items.filter(x=>x.productId!==id);setItems(next);localStorage.setItem('zclothes-cart',JSON.stringify(next));}
- async function pay(){
-  if(!items.length)return; if(items.some(x=>!x.dodoProductId)){alert('One or more products are missing their Dodo product ID.');return}
-  setBusy(true); const r=await fetch('/api/checkout',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({items:items.map(x=>({productId:x.dodoProductId,quantity:x.quantity}))})}); const d=await r.json(); setBusy(false); if(d.checkout_url)window.location.href=d.checkout_url;else alert(d.error||'Checkout failed.');
- }
- return <main className="page checkout-page"><div className="page-hero"><span className="eyebrow">SECURE CHECKOUT</span><h1>Your cart</h1><p>Review your pieces, then continue to Dodo Payments.</p></div>{!items.length?<div className="empty"><p>Your cart is empty.</p><Link className="btn dark" href="/products">Browse products →</Link></div>:<div className="cart-layout"><div className="cart-list">{items.map(x=><div className="cart-row" key={x.productId}><img src={x.image} alt=""/><div><h3>{x.title}</h3><p>Qty {x.quantity}</p><button onClick={()=>remove(x.productId)}>Remove</button></div><strong>₹{(x.price*x.quantity).toLocaleString('en-IN')}</strong></div>)}</div><aside className="summary"><span className="eyebrow dark">ORDER SUMMARY</span><div><span>Subtotal</span><b>₹{total.toLocaleString('en-IN')}</b></div><div><span>Shipping</span><b>Calculated by Dodo</b></div><hr/><div className="summary-total"><span>Total</span><b>₹{total.toLocaleString('en-IN')}</b></div><button className="dodo-btn" onClick={pay} disabled={busy}>{busy?'Opening checkout…':'Pay securely with Dodo'}</button></aside></div>}</main>
+ function save(next:CartItem[]){setItems(next);localStorage.setItem('zclothes-cart',JSON.stringify(next));window.dispatchEvent(new CustomEvent('zclothes:cart-updated'))}
+ function remove(id:string){save(items.filter(x=>x.productId!==id))}
+ function change(id:string,delta:number){save(items.map(x=>x.productId===id?{...x,quantity:Math.max(1,x.quantity+delta)}:x))}
+ return <main className="page checkout-page">
+  <div className="page-hero"><span className="eyebrow">YOUR BAG</span><h1>Review your pieces</h1><p>Everything looks good? Payments will be enabled after verification.</p></div>
+  {!items.length?<div className="empty"><p>Your bag is empty.</p><Link className="btn dark" href="/products">Browse products →</Link></div>:<div className="cart-layout">
+   <div className="cart-list">{items.map(x=><div className="cart-row" key={x.productId}><img src={x.image} alt=""/><div><h3>{x.title}</h3><p>₹{x.price.toLocaleString('en-IN')}</p><div className="cart-qty"><button onClick={()=>change(x.productId,-1)} aria-label="Decrease"><Minus size={12}/></button><span>{x.quantity}</span><button onClick={()=>change(x.productId,1)} aria-label="Increase"><Plus size={12}/></button></div><button className="remove-item" onClick={()=>remove(x.productId)}><Trash size={12}/> Remove</button></div><strong>₹{(x.price*x.quantity).toLocaleString('en-IN')}</strong></div>)}</div>
+   <aside className="summary"><span className="eyebrow dark">ORDER SUMMARY</span><div><span>Subtotal</span><b>₹{total.toLocaleString('en-IN')}</b></div><div><span>Shipping</span><b>Free</b></div><hr/><div className="summary-total"><span>Total</span><b>₹{total.toLocaleString('en-IN')}</b></div><button className="dodo-btn" onClick={()=>setShowSuccess(true)}>Continue <span>→</span></button><p className="checkout-note">Payment checkout is coming soon. Your cart is saved safely in this browser.</p></aside>
+  </div>}
+  {showSuccess&&<div className="checkout-modal" role="dialog" aria-modal="true" onClick={()=>setShowSuccess(false)}><div className="checkout-modal-card" onClick={e=>e.stopPropagation()}><button className="modal-close" onClick={()=>setShowSuccess(false)} aria-label="Close"><X size={20}/></button><CheckCircle size={58} weight="fill"/><span className="eyebrow dark">Z-CLOTHES</span><h2>Congratulations 🎉</h2><p>Your order is ready. Secure payments will be available soon.</p><button className="btn dark" onClick={()=>setShowSuccess(false)}>Continue shopping</button></div></div>}
+ </main>
 }
