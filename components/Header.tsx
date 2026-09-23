@@ -1,31 +1,31 @@
 'use client';
 
 import Link from 'next/link';
-import { MagnifyingGlass, UserCircle, ShoppingBag, List, X, ArrowRight } from '@phosphor-icons/react';
+import { MagnifyingGlass, UserCircle, ShoppingBag, Heart, List, X, ArrowRight } from '@phosphor-icons/react';
 import { useEffect, useState, type FormEvent } from 'react';
 import { CartDrawer } from '@/components/CartDrawer';
-import { readCart } from '@/lib/shop';
+import { readCart, readWishlist } from '@/lib/shop';
 
 export function Header() {
   const [open, setOpen] = useState(false);
   const [bagOpen, setBagOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0);\n  const [wishlistCount, setWishlistCount] = useState(0);
   const [query, setQuery] = useState('');
 
   function syncCount() {
-    setCount(readCart().reduce((sum, item) => sum + Number(item.quantity || 0), 0));
+    setCount(readCart().reduce((sum, item) => sum + Number(item.quantity || 0), 0));\n    setWishlistCount(readWishlist().length);
   }
 
   useEffect(() => {
     syncCount();
     const handler = () => syncCount();
     window.addEventListener('zclothes:cart-updated', handler);
-    window.addEventListener('storage', handler);
+    window.addEventListener('storage', handler);\n    window.addEventListener('zclothes:wishlist-updated', handler);
     return () => {
       window.removeEventListener('zclothes:cart-updated', handler);
-      window.removeEventListener('storage', handler);
+      window.removeEventListener('storage', handler);\n      window.removeEventListener('zclothes:wishlist-updated', handler);
     };
   }, []);
 
@@ -56,7 +56,7 @@ export function Header() {
         </nav>
         <div className="header-actions">
           <button aria-label="Search" onClick={()=>setSearchOpen(true)}><MagnifyingGlass size={20}/></button>
-          <button aria-label="Account" onClick={()=>setAccountOpen(true)}><UserCircle size={21}/></button>
+          <button aria-label="Account" onClick={()=>setAccountOpen(true)}><UserCircle size={21}/></button>\n          <Link href="/wishlist" aria-label="Wishlist"><Heart size={20} weight={wishlistCount ? 'fill' : 'regular'}/>{wishlistCount>0&&<span className="cart-dot">{wishlistCount>99?'99+':wishlistCount}</span>}</Link>
           <button className="bag-button" onClick={()=>setBagOpen(true)} aria-label={`Shopping bag, ${count} items`}>
             <ShoppingBag size={20}/>{count>0&&<span className="cart-dot">{count>99?'99+':count}</span>}
           </button>
