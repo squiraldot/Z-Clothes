@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Heart, Plus } from '@phosphor-icons/react';
 import { useEffect, useState, type MouseEvent } from 'react';
 import type { Product } from '@/lib/types';
@@ -18,37 +19,25 @@ export function ProductCard({ p }: { p: Product }) {
   }, [p.id]);
 
   function quickAdd(event: MouseEvent<HTMLButtonElement>) {
-    event.preventDefault();
-    event.stopPropagation();
-    addToCart(p);
-    setAdded(true);
-    window.setTimeout(() => setAdded(false), 1400);
+    event.preventDefault(); event.stopPropagation();
+    addToCart(p); setAdded(true); window.setTimeout(() => setAdded(false), 1400);
   }
 
   function toggleLike(event: MouseEvent<HTMLButtonElement>) {
-    event.preventDefault();
-    event.stopPropagation();
+    event.preventDefault(); event.stopPropagation();
     setLiked(toggleWishlist(p.id).includes(p.id));
   }
 
   return (
     <Link href={`/products/${p.slug}`} className="product-card">
       <div className="product-image">
-        <img src={p.image} alt={p.title} />
-        {p.images?.[0] && <img className="product-hover-image" src={p.images[0]} alt="" aria-hidden="true" />}
+        <Image src={p.image} alt={p.title} fill sizes="(max-width: 560px) 48vw, (max-width: 900px) 48vw, 25vw" />
+        {p.images?.[0] && <Image className="product-hover-image" src={p.images[0]} alt="" fill sizes="(max-width: 560px) 48vw, (max-width: 900px) 48vw, 25vw" aria-hidden="true" />}
         {p.labels[0] && <span className="tag">{p.labels[0]}</span>}
-        <button className={liked ? 'wish liked' : 'wish'} onClick={toggleLike} aria-label={liked ? 'Remove from wishlist' : 'Add to wishlist'}>
-          <Heart size={16} weight={liked ? 'fill' : 'regular'} />
-        </button>
-        <button className={added ? 'quick-add added' : 'quick-add'} onClick={quickAdd} aria-label={`Quick add ${p.title}`}>
-          <Plus size={16} />
-          <span>{added ? 'Added to bag' : 'Quick add'}</span>
-        </button>
+        <button className={liked ? 'wish liked' : 'wish'} onClick={toggleLike} aria-label={liked ? 'Remove from wishlist' : 'Add to wishlist'}><Heart size={16} weight={liked ? 'fill' : 'regular'} /></button>
+        <button className={added ? 'quick-add added' : 'quick-add'} onClick={quickAdd} aria-label={`Quick add ${p.title}`}><Plus size={16}/><span>{added ? 'Added to bag' : 'Quick add'}</span></button>
       </div>
-      <div className="product-meta">
-        <div><h3>{p.title}</h3><p>{p.category}</p></div>
-        <strong>₹{p.price.toLocaleString('en-IN')}</strong>
-      </div>
+      <div className="product-meta"><div><h3>{p.title}</h3><p>{p.category}</p></div><strong>₹{p.price.toLocaleString('en-IN')}</strong></div>
     </Link>
   );
 }
