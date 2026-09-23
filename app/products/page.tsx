@@ -13,28 +13,25 @@ export default function ProductsPage() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const search = params.get('search');
-    const legacyQuery = params.get('q');
-    setQ(search || legacyQuery || '');
+    setQ(params.get('search') || params.get('q') || '');
+    setCategory(params.get('category') || 'All');
     fetch('/api/products').then((r) => r.json()).then((data) => setProducts(Array.isArray(data) ? data : []));
   }, []);
 
   useEffect(() => {
     const url = new URL(window.location.href);
-    if (q) url.searchParams.set('search', q);
-    else url.searchParams.delete('search');
+    if (q) url.searchParams.set('search', q); else url.searchParams.delete('search');
+    if (category !== 'All') url.searchParams.set('category', category); else url.searchParams.delete('category');
     window.history.replaceState({}, '', url.toString());
-  }, [q]);
+  }, [q, category]);
 
   const cats = ['All', ...Array.from(new Set(products.map((p) => p.category).filter(Boolean)))];
 
   const filtered = useMemo(() => {
-    const result = products.filter(
-      (p) =>
-        (category === 'All' || p.category === category) &&
-        `${p.title} ${p.category} ${p.description}`.toLowerCase().includes(q.toLowerCase()),
+    const result = products.filter((p) =>
+      (category === 'All' || p.category === category) &&
+      `${p.title} ${p.category} ${p.description}`.toLowerCase().includes(q.toLowerCase()),
     );
-
     return [...result].sort((a, b) => {
       if (sort === 'Price: Low') return a.price - b.price;
       if (sort === 'Price: High') return b.price - a.price;
@@ -50,49 +47,21 @@ export default function ProductsPage() {
         <div className="products-hero-copy">
           <span className="eyebrow">THE FULL EDIT</span>
           <h1>All Products</h1>
-          <p>{q ? `Showing results for “${q}”.` : 'Discover our complete collection of premium clothing.'}</p>
+          <p>{q ? `Showing results for “${q}”.` : category !== 'All' ? `Exploring the ${category} edit.` : 'Discover our complete collection of premium clothing.'}</p>
         </div>
       </section>
-
       <section className="catalog">
         <div className="catalog-topline">
-          <div>
-            <span className="catalog-count">{filtered.length} PRODUCTS</span>
-            <h2>{q ? 'Search results' : 'Shop the collection'}</h2>
-          </div>
-          <label className="catalog-search">
-            <MagnifyingGlass size={17} />
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search for clothes..." aria-label="Search products" />
-            {q && <button type="button" className="search-clear" onClick={()=>setQ('')} aria-label="Clear search"><X size={15}/></button>}
-          </label>
+          <div><span className="catalog-count">{filtered.length} PRODUCTS</span><h2>{q || category !== 'All' ? 'Your edit' : 'Shop the collection'}</h2></div>
+          <label className="catalog-search"><MagnifyingGlass size={17}/><input value={q} onChange={(e)=>setQ(e.target.value)} placeholder="Search for clothes..." aria-label="Search products"/>{q&&<button type="button" className="search-clear" onClick={()=>setQ('')} aria-label="Clear search"><X size={15}/></button>}</label>
         </div>
-
         <div className="category-bar">
-          <div className="category-scroll" aria-label="Product categories">
-            {cats.map((c) => (
-              <button className={category === c ? 'category-pill active' : 'category-pill'} onClick={() => setCategory(c)} key={c}>{c}</button>
-            ))}
-          </div>
-
-          <label className="sort-control">
-            <span>Sort by</span>
-            <select value={sort} onChange={(e) => setSort(e.target.value)} aria-label="Sort products">
-              <option>Newest</option>
-              <option>Price: Low</option>
-              <option>Price: High</option>
-            </select>
-            <CaretDown size={14} />
-          </label>
+          <div className="category-scroll" aria-label="Product categories">{cats.map(c=><button className={category===c?'category-pill active':'category-pill'} onClick={()=>setCategory(c)} key={c}>{c}</button>)}</div>
+          <label className="sort-control"><span>Sort by</span><select value={sort} onChange={(e)=>setSort(e.target.value)} aria-label="Sort products"><option>Newest</option><option>Price: Low</option><option>Price: High</option></select><CaretDown size={14}/></label>
         </div>
-
-        <div className="mobile-search">
-          <MagnifyingGlass size={17} />
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search for clothes..." aria-label="Search products" />
-          {q && <button type="button" className="search-clear" onClick={()=>setQ('')} aria-label="Clear search"><X size={15}/></button>}
-        </div>
-
-        <div className="product-grid">{filtered.map((p) => <ProductCard key={p.id} p={p} />)}</div>
-        {filtered.length === 0 && <div className="empty"><p>No products match that search.</p>{q && <button className="drawer-link" onClick={()=>setQ('')}>Clear search →</button>}</div>}
+        <div className="mobile-search"><MagnifyingGlass size={17}/><input value={q} onChange={(e)=>setQ(e.target.value)} placeholder="Search for clothes..." aria-label="Search products"/>{q&&<button type="button" className="search-clear" onClick={()=>setQ('')} aria-label="Clear search"><X size={15}/></button>}</div>
+        <div className="product-grid">{filtered.map((p)=><ProductCard key={p.id} p={p}/>)}</div>
+        {filtered.length===0&&<div className="empty"><p>No products match this edit.</p>{(q||category!=='All')&&<button className="drawer-link" onClick={()=>{setQ('');setCategory('All')}}>Reset filters →</button>}</div>}
       </section>
     </main>
   );
