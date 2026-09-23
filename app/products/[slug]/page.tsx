@@ -1,18 +1,18 @@
 import { notFound } from 'next/navigation';
 import { getProduct } from '@/lib/blogger';
 import { ProductPurchase } from '@/components/ProductPurchase';
+import { ProductGallery } from '@/components/ProductGallery';
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const p = await getProduct(slug);
   if (!p) return notFound();
 
+  const galleryImages = [p.image, ...p.images.filter((image) => image !== p.image)];
+
   return (
     <main className="product-page">
-      <div className="gallery">
-        <div className="gallery-main-wrap"><img className="main-product-image" src={p.image} alt={p.title}/><span className="gallery-label">Z-CLOTHES / {p.category}</span></div>
-        <div className="thumb-row">{p.images.map((im,i)=><img key={i} src={im} alt="" />)}</div>
-      </div>
+      <ProductGallery title={p.title} category={p.category} images={galleryImages} />
       <div className="product-info">
         <span className="eyebrow dark">{p.category}</span>
         <h1>{p.title}</h1>
@@ -22,7 +22,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <ProductPurchase product={p} />
         <div className="service-grid">
           <span>◈<b>Free Shipping</b><small>Across India</small></span>
-          <span>◇<b>Secure Payment</b><small>Launching soon</small></span>
+          <span>◇<b>Payments</b><small>Launching soon</small></span>
           <span>○<b>Easy Returns</b><small>Within 7 days</small></span>
         </div>
         <details open><summary>Product details</summary><div className="rich" dangerouslySetInnerHTML={{__html:p.contentHtml||'<p>Premium materials, relaxed proportions and a modern Z-Clothes silhouette.</p>'}}/></details>
