@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { MagnifyingGlass, UserCircle, ShoppingBag, List, X, ArrowRight } from '@phosphor-icons/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { CartDrawer } from '@/components/CartDrawer';
 import { readCart } from '@/lib/shop';
 
@@ -34,7 +34,7 @@ export function Header() {
     return () => { document.body.style.overflow = ''; };
   }, [searchOpen, accountOpen]);
 
-  function submitSearch(event: React.FormEvent) {
+  function submitSearch(event: FormEvent) {
     event.preventDefault();
     const value = query.trim();
     window.location.href = value ? `/products?search=${encodeURIComponent(value)}` : '/products';
