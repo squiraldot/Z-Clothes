@@ -273,3 +273,19 @@
 .product-card{position:relative}.product-card-link{display:block}.product-card-actions{position:absolute;inset:0;pointer-events:none;z-index:4}.product-card-actions .wish,.product-card-actions .quick-add{pointer-events:auto}.product-card-actions .wish{position:absolute;right:12px;top:12px}.product-card-actions .quick-add{position:absolute;left:12px;right:12px;bottom:12px}
 .catalog-loading{min-height:280px;display:grid;place-items:center;color:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase}.error-inline{min-height:280px}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.product-card,.product-card:hover,.category-card img,.product-image img{transition:none!important}}
+
+/* Phase 9 — performance and final responsive polish */
+img{max-width:100%}
+button,a,input,select,textarea{touch-action:manipulation}
+@media(max-width:700px){
+  .hero-copy{padding-top:86px}
+  .hero-actions{flex-wrap:wrap}
+  .product-info .buy-stack{box-shadow:0 8px 30px rgba(0,0,0,.08)}
+  .cart-drawer{overscroll-behavior:contain}
+}
+@media(max-width:560px){
+  .header-actions{gap:10px}
+  .header-actions button,.header-actions a{min-width:28px;min-height:28px;align-items:center;justify-content:center}
+  .catalog-topline h2{line-height:1.05}
+  .product-card-actions .quick-add{left:7px;right:7px;bottom:7px}
+}
