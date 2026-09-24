@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 import { CaretDown, MagnifyingGlass, X } from '@phosphor-icons/react';
 import { ProductCard } from '@/components/ProductCard';
@@ -44,7 +45,7 @@ export default function ProductsPage() {
   return (
     <main className="products-page">
       <section className="products-hero">
-        <img src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=2200&q=90" alt="" />
+        <Image src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=2200&q=90" alt="" fill priority sizes="100vw" quality={82} />
         <div className="products-hero-overlay" />
         <div className="products-hero-copy">
           <span className="eyebrow">THE FULL EDIT</span>
