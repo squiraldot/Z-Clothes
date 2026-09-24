@@ -18,6 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       title: `${product.title} — Z-Clothes`,
       description: product.description,
       type: 'website',
+      siteName: 'Z-Clothes',
       images: product.image ? [{ url: product.image, alt: product.title }] : [],
     },
   };
@@ -42,7 +43,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       '@type': 'Offer',
       priceCurrency: p.currency || 'INR',
       price: p.price,
-      availability: 'https://schema.org/InStock',
       url: `${SITE}/products/${p.slug}`,
     },
   };
