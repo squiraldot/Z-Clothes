@@ -17,7 +17,7 @@ export function ProductGallery({ title, category, images }: { title:string; cate
       </div>
       {list.length > 1 && <div className="thumb-row" aria-label="Product images">
         {list.map((image, index) => <button type="button" key={image + index} className={index === active ? 'thumb-button active' : 'thumb-button'} onClick={() => setActive(index)} aria-label={`View image ${index + 1}`} aria-current={index === active}>
-          <Image src={image} alt="" width={76} height={90} sizes="76px" />
+          <Image src={image} alt={`${title} image ${index + 1}`} width={76} height={90} sizes="76px" />
         </button>)}
       </div>}
     </div>
