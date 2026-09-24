@@ -1,15 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import type { Product } from '@/lib/types';
 import { addToCart } from '@/lib/shop';
 import { CheckCircle, LockKey, X } from '@phosphor-icons/react';
 
-type Props = {
-  product: Product;
-  color?: string;
-  size?: string;
-};
+type Props = { product: Product; color?: string; size?: string };
 
 export function BuyButton({ product, color, size }: Props) {
   const [showCongratulations, setShowCongratulations] = useState(false);
@@ -22,58 +19,44 @@ export function BuyButton({ product, color, size }: Props) {
   }
 
   function buy() {
+    addToCart(product, { color, size });
     setShowCongratulations(true);
   }
+
+  useEffect(() => {
+    if (!showCongratulations) return;
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') setShowCongratulations(false);
+    }
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [showCongratulations]);
 
   return (
     <>
       <div className="buy-stack">
-        <button className={added ? 'add-cart added' : 'add-cart'} onClick={add}>
+        <button type="button" className={added ? 'add-cart added' : 'add-cart'} onClick={add}>
           {added ? 'Added to Bag ✓' : 'Add to Bag'}
         </button>
-        <button className="dodo-btn" onClick={buy}>
-          <LockKey size={18} />
-          Buy Now
+        <button type="button" className="dodo-btn" onClick={buy}>
+          <LockKey size={18} /> Buy Now
         </button>
       </div>
 
       {showCongratulations && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label="Congratulations"
-          onClick={() => setShowCongratulations(false)}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 9999,
-            display: 'grid',
-            placeItems: 'center',
-            padding: '24px',
-            background: 'rgba(0,0,0,.72)',
-            backdropFilter: 'blur(12px)',
-          }}
-        >
-          <div
-            onClick={(event) => event.stopPropagation()}
-            style={{
-              position: 'relative',
-              width: 'min(420px, 100%)',
-              padding: '42px 28px 34px',
-              borderRadius: '28px',
-              background: '#fff',
-              color: '#111',
-              textAlign: 'center',
-              boxShadow: '0 30px 100px rgba(0,0,0,.35)',
-            }}
-          >
-            <button type="button" onClick={() => setShowCongratulations(false)} aria-label="Close" className="modal-close">
-              <X size={22} />
+        <div className="checkout-modal" role="dialog" aria-modal="true" aria-labelledby="buy-now-title" onClick={() => setShowCongratulations(false)}>
+          <div className="checkout-modal-card" onClick={(event) => event.stopPropagation()}>
+            <button type="button" className="modal-close" onClick={() => setShowCongratulations(false)} aria-label="Close">
+              <X size={20} />
             </button>
-            <CheckCircle size={64} weight="fill" style={{ marginBottom: 16 }} />
-            <div style={{fontSize:13,letterSpacing:'.18em',fontWeight:700,marginBottom:10}}>Z-CLOTHES</div>
-            <h2 style={{margin:'0 0 10px',fontSize:34,lineHeight:1.05}}>Congratulations 🎉</h2>
-            <p style={{margin:0,color:'#666',lineHeight:1.6}}>Your selection is ready. Payments are coming soon.</p>
+            <CheckCircle size={58} weight="fill" />
+            <span className="eyebrow dark">Z-CLOTHES</span>
+            <h2 id="buy-now-title">Added to your bag 🎉</h2>
+            <p>Your selection has been saved. Secure payments will be available after verification.</p>
+            <div className="modal-actions">
+              <button type="button" className="btn outline" onClick={() => setShowCongratulations(false)}>Continue shopping</button>
+              <Link href="/checkout" className="btn dark" onClick={() => setShowCongratulations(false)}>View bag →</Link>
+            </div>
           </div>
         </div>
       )}
