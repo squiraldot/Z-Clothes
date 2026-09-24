@@ -323,3 +323,13 @@ button,a,input,select,textarea{touch-action:manipulation}
   .featured-products-rail .product-meta strong{font-size:11px}
   .featured-products-rail .wish{width:36px;height:36px}
 }
+
+/* Phase 11 — purchase modal and product gallery polish */
+.modal-actions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:4px}
+.modal-actions .btn{justify-content:center}
+.thumb-button img{object-fit:cover}
+@media(max-width:560px){
+  .modal-actions{display:grid;grid-template-columns:1fr}
+  .modal-actions .btn{width:100%}
+  .checkout-modal-card{padding:38px 22px 26px}
+}
