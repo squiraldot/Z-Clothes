@@ -32,16 +32,18 @@ export function ProductCard({ p }: { p: Product }) {
 
   return (
     <article className="product-card">
-      <Link href={`/products/${p.slug}`} className="product-card-link" aria-label={`View ${p.title}`}>
-        <div className="product-image">
-          <Image src={p.image} alt={p.title} fill sizes="(max-width: 560px) 48vw, (max-width: 900px) 48vw, 25vw" />
-          {p.images?.[0] && <Image className="product-hover-image" src={p.images[0]} alt="" fill sizes="(max-width: 560px) 48vw, (max-width: 900px) 48vw, 25vw" aria-hidden="true" />}
-          {p.labels[0] && <span className="tag">{p.labels[0]}</span>}
+      <div className="product-card-media">
+        <Link href={`/products/${p.slug}`} className="product-card-link" aria-label={`View ${p.title}`}>
+          <div className="product-image">
+            <Image src={p.image} alt={p.title} fill sizes="(max-width: 560px) 48vw, (max-width: 900px) 48vw, 25vw" />
+            {p.images?.[0] && <Image className="product-hover-image" src={p.images[0]} alt="" fill sizes="(max-width: 560px) 48vw, (max-width: 900px) 48vw, 25vw" aria-hidden="true" />}
+            {p.labels[0] && <span className="tag">{p.labels[0]}</span>}
+          </div>
+        </Link>
+        <div className="product-card-actions" aria-label="Product actions">
+          <button className={liked ? 'wish liked' : 'wish'} onClick={toggleLike} aria-label={liked ? 'Remove from wishlist' : 'Add to wishlist'}><Heart size={20} weight={liked ? 'fill' : 'regular'} /></button>
+          <button className={added ? 'quick-add added' : 'quick-add'} onClick={quickAdd} aria-label={`Quick add ${p.title}`}><Plus size={16}/><span>{added ? 'Added to bag' : 'Quick add'}</span></button>
         </div>
-      </Link>
-      <div className="product-card-actions">
-        <button className={liked ? 'wish liked' : 'wish'} onClick={toggleLike} aria-label={liked ? 'Remove from wishlist' : 'Add to wishlist'}><Heart size={16} weight={liked ? 'fill' : 'regular'} /></button>
-        <button className={added ? 'quick-add added' : 'quick-add'} onClick={quickAdd} aria-label={`Quick add ${p.title}`}><Plus size={16}/><span>{added ? 'Added to bag' : 'Quick add'}</span></button>
       </div>
       <Link href={`/products/${p.slug}`} className="product-meta">
         <div><h3>{p.title}</h3><p>{p.category}</p></div><strong>₹{p.price.toLocaleString('en-IN')}</strong>
