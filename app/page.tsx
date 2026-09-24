@@ -10,7 +10,12 @@ const seasonImage='https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?
 const storyImage='https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1400&q=90';
 
 export default async function Home() {
-  const products=await getProducts();
+  let products = [];
+  try {
+    products = await getProducts();
+  } catch {
+    // Keep the storefront shell available if Blogger is temporarily unavailable.
+  }
   const categoryCards=categoryNames.map((name)=>({name,product:products.find((p)=>p.category.toLowerCase()===name.toLowerCase())??products.find((p)=>p.title.toLowerCase().includes(name.toLowerCase().replace(' ','')))}));
   return <main>
     <ImmersiveHero/>
