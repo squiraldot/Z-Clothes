@@ -4,13 +4,14 @@ import { ArrowRight } from '@phosphor-icons/react/dist/ssr';
 import { getProducts } from '@/lib/blogger';
 import { HorizontalRail } from '@/components/HorizontalRail';
 import { ImmersiveHero } from '@/components/ImmersiveHero';
+import type { Product } from '@/lib/types';
 
 const categoryNames = ['T-Shirts','Hoodies','Jackets','Cargo Pants','Shirts'];
 const seasonImage='https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=2200&q=90';
 const storyImage='https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1400&q=90';
 
 export default async function Home() {
-  let products = [];
+  let products: Product[] = [];
   try {
     products = await getProducts();
   } catch {
