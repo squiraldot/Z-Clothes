@@ -4,7 +4,14 @@ import { getProducts } from '@/lib/blogger';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.NEXT_PUBLIC_SITE_URL || 'https://z-clothes-sia-sprides-projects.vercel.app';
   const staticRoutes = ['', '/products', '/about', '/contact', '/policies'];
-  const products = await getProducts();
+
+  let products: Awaited<ReturnType<typeof getProducts>> = [];
+  try {
+    products = await getProducts();
+  } catch {
+    // Keep the static sitemap available if Blogger is temporarily unavailable.
+  }
+
   return [
     ...staticRoutes.map((path) => ({
       url: `${base}${path}`,
