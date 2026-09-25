@@ -918,3 +918,16 @@ html,body{max-width:100%;overflow-x:hidden}
   .discovery-toolbar{padding:14px 0 !important}
   .discovery-toolbar .sort-control select{min-width:100px !important}
 }
+
+/* Phase 33 — wishlist & cart 2.0 */
+.wishlist-toolbar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px 22px;margin:0 0 16px;border:1px solid var(--line);background:#fff}
+.wishlist-toolbar strong{display:block;font-family:Georgia,serif;font-size:28px;font-weight:400;margin-top:6px}
+.wishlist-toolbar-actions{display:flex;gap:8px}
+.wishlist-toolbar-actions .btn{display:inline-flex;align-items:center;gap:7px}
+.cart-head-actions{display:flex;align-items:center;gap:12px}
+.cart-clear{border:0;background:none;color:var(--muted);font:inherit;font-size:9px;text-transform:uppercase;letter-spacing:.1em;text-decoration:underline;text-underline-offset:4px;cursor:pointer}
+@media(max-width:560px){
+ .wishlist-toolbar{align-items:flex-start;flex-direction:column;padding:18px}
+ .wishlist-toolbar-actions{width:100%}
+ .wishlist-toolbar-actions .btn{flex:1;justify-content:center}
+}
