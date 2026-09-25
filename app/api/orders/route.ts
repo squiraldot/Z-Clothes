@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { getProducts } from '@/lib/blogger';
 
-type BodyItem = { productId?: string; quantity?: number; color?: string; size?: string };\ntype Body = { items?: BodyItem[]; addressId?: string };
+type BodyItem = { productId?: string; quantity?: number; color?: string; size?: string };
+type Body = { items?: BodyItem[]; addressId?: string };
 
 export async function POST(request: Request) {
   const supabase = await createSupabaseServerClient();
