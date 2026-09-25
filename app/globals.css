@@ -720,3 +720,25 @@ html,body{max-width:100%;overflow-x:hidden}
  .notifications-page-heading h1{font-size:50px}
  .notifications-page-empty{min-height:280px;padding:35px 22px}
 }
+
+/* Phase 32 — search & discovery */
+.discovery-toolbar{display:flex;align-items:center;gap:18px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:12px 0;margin-bottom:14px}
+.filter-toggle{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:#111;padding:10px 13px;font:inherit;font-size:9px;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;white-space:nowrap}
+.filter-toggle.active{background:#111;color:#fff;border-color:#111}
+.filter-toggle span{display:grid;place-items:center;min-width:17px;height:17px;padding:0 4px;border-radius:99px;background:#d7bd95;color:#111;font-size:8px}
+.quick-labels{display:flex;align-items:center;gap:7px;min-width:0;overflow-x:auto;scrollbar-width:none}
+.quick-labels::-webkit-scrollbar{display:none}
+.quick-labels button{border:0;background:transparent;color:var(--muted);padding:7px 4px;font:inherit;font-size:9px;text-transform:uppercase;letter-spacing:.08em;cursor:pointer;white-space:nowrap}
+.quick-labels button:hover,.quick-labels button.active{color:#111;text-decoration:underline;text-underline-offset:4px}
+.discovery-toolbar .sort-control{margin-left:auto}
+.filter-panel{display:none;background:#fff;border:1px solid var(--line);padding:20px 22px;margin-bottom:24px;grid-template-columns:1.2fr 1fr 1fr 1.4fr;gap:24px}
+.filter-panel.open{display:grid}
+.filter-group{min-width:0}
+.filter-group>b{display:flex;justify-content:space-between;gap:12px;font-size:9px;text-transform:uppercase;letter-spacing:.11em;margin-bottom:12px}
+.filter-group>b span{font-weight:500;color:var(--muted);letter-spacing:0;text-transform:none}
+.filter-options{display:flex;flex-wrap:wrap;gap:6px}
+.filter-options button{border:1px solid var(--line);background:#faf9f6;padding:8px 10px;color:#555;font:inherit;font-size:9px;cursor:pointer}
+.filter-options button:hover,.filter-options button.selected{background:#111;color:#fff;border-color:#111}
+.price-filter input{width:100%;accent-color:#111;cursor:pointer}
+.price-filter>div{display:flex;justify-content:space-between;color:var(--muted);font-size:8px;margin-top:5px}
+.clear-filters{border:0;background:none;color:#8c4037;text-align:left;padding:0;font:inherit;font-size:9px;text-decoration:underline;text-underline-offset:4px;cursor:pointer;align-self:end}
