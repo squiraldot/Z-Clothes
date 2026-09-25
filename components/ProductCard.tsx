@@ -6,6 +6,8 @@ import { Heart, Plus } from '@phosphor-icons/react';
 import { useEffect, useState, type MouseEvent } from 'react';
 import type { Product } from '@/lib/types';
 import { addToCart, readWishlist, toggleWishlist } from '@/lib/shop';
+import { toggleRemoteWishlist } from '@/lib/wishlist';
+import { createSupabaseBrowserClient } from '@/lib/supabase/browser';
 
 export function ProductCard({ p }: { p: Product }) {
   const [liked, setLiked] = useState(false);
@@ -25,9 +27,20 @@ export function ProductCard({ p }: { p: Product }) {
     window.setTimeout(() => setAdded(false), 1400);
   }
 
-  function toggleLike(event: MouseEvent<HTMLButtonElement>) {
+  async function toggleLike(event: MouseEvent<HTMLButtonElement>) {
     event.stopPropagation();
-    setLiked(toggleWishlist(p.id).includes(p.id));
+    try {
+      const supabase = createSupabaseBrowserClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const next = await toggleRemoteWishlist(p.id);
+        setLiked(Boolean(next?.includes(p.id)));
+      } else {
+        setLiked(toggleWishlist(p.id).includes(p.id));
+      }
+    } catch {
+      setLiked(readWishlist().includes(p.id));
+    }
   }
 
   return (
