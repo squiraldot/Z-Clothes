@@ -14,7 +14,15 @@ export async function POST(request: Request) {
   try { body = await request.json(); }
   catch { return NextResponse.json({ error: 'Invalid request.' }, { status: 400 }); }
 
-  const rawItems = Array.isArray(body.items) ? body.items.slice(0, 50) : [];\n  const addressId = String(body.addressId || '');\n  if (!addressId) return NextResponse.json({ error: 'Please select a delivery address.' }, { status: 400 });\n\n  const { data: address, error: addressError } = await supabase\n    .from('addresses')\n    .select('id,full_name,phone,line1,line2,landmark,city,state,pincode')\n    .eq('id', addressId).eq('user_id', user.id).maybeSingle();\n  if (addressError || !address) return NextResponse.json({ error: 'Selected delivery address is unavailable.' }, { status: 400 });
+  const rawItems = Array.isArray(body.items) ? body.items.slice(0, 50) : [];
+  const addressId = String(body.addressId || '');
+  if (!addressId) return NextResponse.json({ error: 'Please select a delivery address.' }, { status: 400 });
+
+  const { data: address, error: addressError } = await supabase
+    .from('addresses')
+    .select('id,full_name,phone,line1,line2,landmark,city,state,pincode')
+    .eq('id', addressId).eq('user_id', user.id).maybeSingle();
+  if (addressError || !address) return NextResponse.json({ error: 'Selected delivery address is unavailable.' }, { status: 400 });
   if (!rawItems.length) return NextResponse.json({ error: 'Your bag is empty.' }, { status: 400 });
 
   const products = await getProducts();
@@ -45,7 +53,10 @@ export async function POST(request: Request) {
 
   const { data: order, error: orderError } = await supabase.from('orders').insert({
     user_id: user.id, order_number: orderNumber, status: 'pending_payment',
-    currency: 'INR', subtotal, shipping: 0, total: subtotal, email: user.email ?? null,\n    shipping_address_id: address.id, shipping_name: address.full_name, shipping_phone: address.phone,\n    shipping_line1: address.line1, shipping_line2: address.line2, shipping_landmark: address.landmark,\n    shipping_city: address.city, shipping_state: address.state, shipping_pincode: address.pincode,
+    currency: 'INR', subtotal, shipping: 0, total: subtotal, email: user.email ?? null,
+    shipping_address_id: address.id, shipping_name: address.full_name, shipping_phone: address.phone,
+    shipping_line1: address.line1, shipping_line2: address.line2, shipping_landmark: address.landmark,
+    shipping_city: address.city, shipping_state: address.state, shipping_pincode: address.pincode,
   }).select('id, order_number, status, total, currency').single();
 
   if (orderError || !order) return NextResponse.json({ error: 'Unable to create your order draft.' }, { status: 500 });
