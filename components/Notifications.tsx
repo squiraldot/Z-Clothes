@@ -4,10 +4,11 @@ import Link from 'next/link';
 import { Bell } from '@phosphor-icons/react';
 import { useEffect, useState } from 'react';
 
-export default function Notifications(){
+export default function Notifications({ enabled = true }: { enabled?: boolean }){
   const [unread,setUnread]=useState(0);
 
   async function load(){
+    if(!enabled){setUnread(0);return;}
     try{
       const r=await fetch('/api/notifications',{cache:'no-store'});
       const d=await r.json();
@@ -21,7 +22,7 @@ export default function Notifications(){
     window.addEventListener('focus',onFocus);
     const timer=window.setInterval(load,30000);
     return()=>{window.removeEventListener('focus',onFocus);window.clearInterval(timer)};
-  },[]);
+  },[enabled]);
 
   return <Link className="notification-trigger" href="/account/notifications" aria-label={unread ? String(unread)+' unread notifications' : 'Notifications'}>
     <Bell size={18}/>
