@@ -678,23 +678,45 @@ html,body{max-width:100%;overflow-x:hidden}
 
 
 /* Phase 31 — customer notifications */
-.notifications-wrap{position:relative;display:flex}
+.notifications-wrap{display:flex;align-items:center}
 .notification-trigger{background:none;border:0;color:#fff;position:relative;display:flex;align-items:center;justify-content:center;cursor:pointer;min-width:24px;min-height:32px}
-.notification-count{position:absolute;right:-6px;top:0;min-width:15px;height:15px;padding:0 4px;border-radius:99px;background:#d7bd95;color:#111;font-size:8px;line-height:15px;text-align:center}
-.notification-backdrop{position:fixed;inset:0;z-index:70;background:transparent;border:0}
-.notification-panel{position:fixed;z-index:80;top:68px;right:24px;width:min(390px,calc(100vw - 28px));max-height:min(620px,calc(100vh - 90px));overflow:auto;background:var(--paper);color:#111;border:1px solid var(--line);box-shadow:0 20px 70px rgba(0,0,0,.18)}
-.notification-head{display:flex;align-items:flex-start;justify-content:space-between;padding:22px 22px 15px;border-bottom:1px solid var(--line)}
-.notification-head h2{font-family:Georgia,serif;font-weight:400;font-size:30px;letter-spacing:-.03em;margin:8px 0 0}
-.notification-head button{border:0;background:transparent;color:#111;cursor:pointer}
-.notification-read-all{display:block;margin:12px 22px 2px  auto;border:0;background:none;color:#6e6a62;font-size:9px;text-transform:uppercase;letter-spacing:.1em;cursor:pointer}
-.notification-list{display:grid}
-.notification-item{display:grid;grid-template-columns:1fr auto;gap:14px;padding:17px 22px;border-top:1px solid var(--line);transition:background .15s}
-.notification-item.unread{background:#f1eee7}
-.notification-item b{font-size:11px;font-weight:600}
-.notification-item p{font-size:10px;line-height:1.55;color:var(--muted);margin:6px 0}
-.notification-item small{font-size:8px;color:#99948b;text-transform:uppercase;letter-spacing:.08em}
-.notification-item>a{align-self:center;font-size:9px;text-transform:uppercase;letter-spacing:.1em;text-decoration:underline;text-underline-offset:4px}
-.notification-empty{padding:45px 22px;margin:0;color:var(--muted);font-size:11px;text-align:center}
+.notification-count{position:absolute;right:-7px;top:-3px;min-width:15px;height:15px;padding:0 4px;border-radius:99px;background:#d7bd95;color:#111;font-size:8px;line-height:15px;text-align:center}
+
+.notifications-page-heading{padding-bottom:42px;border-bottom:1px solid var(--line)}
+.notifications-page-heading h1{font-family:Georgia,serif;font-weight:400;font-size:clamp(54px,7vw,90px);line-height:.9;letter-spacing:-.055em;margin:16px 0 10px}
+.notifications-page-heading p{margin:0;color:var(--muted);font-size:12px;line-height:1.7;max-width:540px}
+.notifications-page-content{margin-top:14px}
+.notifications-page-toolbar{display:flex;align-items:flex-end;justify-content:space-between;gap:25px;padding:28px 30px;background:#fff;border:1px solid var(--line)}
+.notifications-page-toolbar h2{font-family:Georgia,serif;font-size:34px;font-weight:400;letter-spacing:-.03em;margin:10px 0 6px}
+.notifications-page-toolbar p{margin:0;color:var(--muted);font-size:11px}
+.notifications-page-toolbar .btn{white-space:nowrap}
+.notifications-page-list{display:grid;margin-top:14px;background:#fff;border:1px solid var(--line)}
+.notification-page-item{display:grid;grid-template-columns:1fr auto;gap:30px;padding:25px 30px;border-bottom:1px solid var(--line)}
+.notification-page-item:last-child{border-bottom:0}
+.notification-page-item.unread{background:#f4f1e9}
+.notification-page-title{display:flex;align-items:center;gap:8px}
+.notification-type{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.13em}
+.notification-page-title i{width:6px;height:6px;border-radius:50%;background:#111;display:block}
+.notification-page-copy h3{font-size:15px;font-weight:500;margin:10px 0 6px}
+.notification-page-copy p{font-size:11px;line-height:1.65;color:var(--muted);margin:0 0 9px}
+.notification-page-copy small{font-size:8px;color:#99948b;text-transform:uppercase;letter-spacing:.08em}
+.notification-page-action{display:flex;align-items:center;gap:14px}
+.notification-page-action a,.notification-page-action button{border:0;background:none;padding:0;color:#111;font-size:9px;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;white-space:nowrap}
+.notification-page-action a{display:inline-flex;align-items:center;gap:6px;text-decoration:underline;text-underline-offset:4px}
+.notification-page-action button{color:var(--muted)}
+.notifications-page-empty{background:#fff;border:1px solid var(--line);min-height:330px;padding:50px 25px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.notifications-empty-icon{width:54px;height:54px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;font-family:Georgia,serif;font-size:22px;margin-bottom:16px}
+.notifications-page-empty h3{font-family:Georgia,serif;font-size:31px;font-weight:400;margin:0 0 8px}
+.notifications-page-empty p{max-width:430px;color:var(--muted);font-size:11px;line-height:1.7;margin:0 0 22px}
+.notifications-page-empty .btn{display:inline-flex;align-items:center}
+@media(max-width:700px){
+ .notifications-page-heading h1{font-size:58px}
+ .notifications-page-toolbar{align-items:flex-start;flex-direction:column;padding:24px}
+ .notifications-page-toolbar .btn{width:100%;justify-content:center}
+ .notification-page-item{grid-template-columns:1fr;gap:17px;padding:22px 24px}
+ .notification-page-action{justify-content:flex-start}
+}
 @media(max-width:560px){
- .notification-panel{top:62px;right:14px;width:calc(100vw - 28px)}
+ .notifications-page-heading h1{font-size:50px}
+ .notifications-page-empty{min-height:280px;padding:35px 22px}
 }
