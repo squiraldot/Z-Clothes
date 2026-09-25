@@ -780,3 +780,16 @@ html,body{max-width:100%;overflow-x:hidden}
   .filter-toggle,.discovery-toolbar .sort-control select{min-height:46px;height:46px}
   .filter-panel{padding-left:18px;padding-right:18px}
 }
+
+/* Mobile discovery alignment */
+@media(max-width:700px){
+  .discovery-toolbar{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch;gap:12px}
+  .discovery-toolbar .filter-toggle{width:100%;min-width:0}
+  .discovery-toolbar .sort-control{width:100%;min-width:0;display:block;position:relative;margin:0}
+  .discovery-toolbar .sort-control select{display:block;width:100%;height:44px;min-width:0;margin:0;padding:0 40px 0 13px;appearance:auto}
+  .discovery-toolbar .sort-control svg{position:absolute;right:12px;top:50%;transform:translateY(-50%);margin:0;pointer-events:none}
+}
+@media(max-width:560px){
+  .discovery-toolbar{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+  .discovery-toolbar .filter-toggle,.discovery-toolbar .sort-control select{height:46px;min-height:46px}
+}
