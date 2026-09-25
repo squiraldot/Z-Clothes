@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { Product } from '@/lib/types';
 import { BuyButton } from '@/components/BuyButton';
@@ -16,9 +16,9 @@ export function ProductPurchase({ product }: { product: Product }) {
   const [liked, setLiked] = useState(false);
   const [shared, setShared] = useState(false);
 
-  useState(() => {
+  useEffect(() => {
     setLiked(readWishlist().includes(product.id));
-  });
+  }, [product.id]);
 
   function changeQuantity(delta: number) {
     setQuantity((current) => Math.max(1, Math.min(20, current + delta)));
