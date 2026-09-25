@@ -29,6 +29,10 @@ export function writeCart(items: CartItem[]) {
   window.dispatchEvent(new CustomEvent('zclothes:cart-updated'));
 }
 
+export function setCart(items: CartItem[]) {
+  writeCart(items);
+}
+
 export function cartItemKey(item: Pick<CartItem, 'productId' | 'color' | 'size'>) {
   return [item.productId, item.color || '', item.size || ''].join('::');
 }
