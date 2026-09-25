@@ -931,3 +931,60 @@ html,body{max-width:100%;overflow-x:hidden}
  .wishlist-toolbar-actions{width:100%}
  .wishlist-toolbar-actions .btn{flex:1;justify-content:center}
 }
+
+/* Phase 34 — customer account 2.0 */
+.account-v2-head{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-bottom:28px;border-bottom:1px solid var(--line)}
+.account-welcome{display:flex;align-items:center;gap:16px}
+.account-v2-avatar{width:58px;height:58px;border:1px solid var(--line);border-radius:50%;overflow:hidden;display:grid;place-items:center;background:#f1eee7;color:#111;flex:0 0 auto}
+.account-v2-avatar img{width:100%;height:100%;object-fit:cover}
+.account-v2-head h1{font-family:Georgia,serif;font-size:clamp(42px,6vw,72px);font-weight:400;line-height:.95;letter-spacing:-.05em;margin:10px 0 6px}
+.account-v2-head p{margin:0;color:var(--muted);font-size:11px}
+.account-v2-nav{display:flex;gap:24px;align-items:center;border-bottom:1px solid var(--line);padding:13px 0;overflow-x:auto;scrollbar-width:none}
+.account-v2-nav::-webkit-scrollbar{display:none}
+.account-v2-nav a{position:relative;color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.12em;white-space:nowrap}
+.account-v2-nav a.active,.account-v2-nav a:hover{color:#111}
+.account-v2-nav a.active:after{content:'';position:absolute;left:0;right:0;bottom:-14px;height:1px;background:#111}
+.account-v2-nav a span{display:inline-grid;place-items:center;min-width:15px;height:15px;margin-left:5px;padding:0 4px;border-radius:99px;background:#111;color:#fff;font-size:7px}
+.account-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.account-stat{display:flex;align-items:center;gap:13px;padding:18px;background:#fff;border:1px solid var(--line);color:#111}
+.account-stat>div{min-width:0;flex:1}
+.account-stat span{display:block;color:var(--muted);font-size:8px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px}
+.account-stat strong{font-family:Georgia,serif;font-size:26px;font-weight:400}
+.account-v2-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:14px}
+.account-v2-grid .account-profile-panel{grid-row:span 2}
+.account-panel-top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+.account-panel-top>a{display:inline-flex;align-items:center;gap:6px;color:#111;font-size:9px;text-transform:uppercase;letter-spacing:.1em;text-decoration:underline;text-underline-offset:4px}
+.account-recent-orders h2,.account-shortcuts h2{margin-bottom:18px}
+.account-mini-orders{border-top:1px solid var(--line)}
+.account-mini-orders>a{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 0;border-bottom:1px solid var(--line);color:#111}
+.account-mini-orders>a>div{min-width:0}
+.account-mini-orders b{display:block;font-size:10px}
+.account-mini-orders span{display:block;color:var(--muted);font-size:9px;margin-top:4px}
+.account-mini-orders strong{display:flex;align-items:center;gap:7px;font-size:10px;white-space:nowrap}
+.account-card-empty{min-height:150px;border:1px dashed var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--muted)}
+.account-card-empty p{font-size:10px;margin:8px 0}
+.account-card-empty a{font-size:9px;color:#111;text-decoration:underline;text-underline-offset:4px}
+.account-shortcut-grid{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+.account-shortcut-grid>a{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;padding:15px 4px;border-bottom:1px solid var(--line);color:#111;font-size:10px}
+.account-shortcut-grid>a:nth-child(odd){padding-right:15px;border-right:1px solid var(--line)}
+.account-shortcut-grid>a:nth-child(even){padding-left:15px}
+.shortcut-z{width:18px;height:18px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;font-family:Georgia,serif;font-size:9px}
+@media(max-width:850px){
+ .account-stat-grid{grid-template-columns:1fr 1fr}
+ .account-v2-grid{grid-template-columns:1fr}
+ .account-v2-grid .account-profile-panel{grid-row:auto}
+}
+@media(max-width:560px){
+ .account-v2-head{align-items:flex-start}
+ .account-welcome{align-items:flex-start}
+ .account-v2-avatar{width:48px;height:48px}
+ .account-v2-head .btn{padding:10px 12px;font-size:9px}
+ .account-v2-head h1{font-size:43px}
+ .account-v2-nav{gap:19px}
+ .account-stat-grid{gap:8px}
+ .account-stat{padding:15px 12px;gap:9px}
+ .account-stat strong{font-size:22px}
+ .account-v2-grid{gap:10px}
+ .account-shortcut-grid{grid-template-columns:1fr}
+ .account-shortcut-grid>a:nth-child(odd),.account-shortcut-grid>a:nth-child(even){padding:15px 4px;border-right:0}
+}
