@@ -545,3 +545,25 @@ html,body{max-width:100%;overflow-x:hidden}
 
 /* Phase 26 — checkout confirmation polish */
 .checkout-modal-card .modal-actions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:20px}.checkout-modal-card .modal-actions .btn{min-width:150px;justify-content:center}@media(max-width:520px){.checkout-modal-card .modal-actions{display:grid;width:100%}.checkout-modal-card .modal-actions .btn{width:100%}}
+
+
+/* Phase 27 — admin order desk */
+.admin-page .account-heading{padding-bottom:38px}
+.admin-orders-panel{padding:0;overflow:hidden}
+.admin-orders-panel .panel-heading{padding:22px 26px}
+.admin-order-list{display:grid}
+.admin-order-row{display:flex;align-items:center;justify-content:space-between;gap:25px;padding:20px 26px;border-top:1px solid var(--line)}
+.admin-order-row>div:first-child{display:grid;gap:6px;min-width:0}
+.admin-order-row>div:first-child strong{font-size:13px;font-weight:500}
+.admin-order-row>div:first-child small{font-size:10px;color:var(--muted)}
+.admin-order-meta{display:flex;align-items:center;gap:18px;flex-shrink:0}
+.admin-order-meta>strong{font-size:12px;font-weight:500}
+.admin-status{display:grid;gap:4px}
+.admin-status select{appearance:none;border:1px solid var(--line);background:var(--cream);padding:9px 28px 9px 11px;font:inherit;font-size:10px;color:#111;min-width:140px;cursor:pointer}
+.admin-status select:disabled{opacity:.6;cursor:wait}
+.admin-status small{font-size:9px;color:#9b3c35;max-width:180px}
+@media(max-width:650px){
+ .admin-order-row{align-items:flex-start;flex-direction:column}
+ .admin-order-meta{width:100%;justify-content:space-between}
+ .admin-status select{min-width:155px}
+}
