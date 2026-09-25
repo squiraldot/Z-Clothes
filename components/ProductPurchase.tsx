@@ -43,7 +43,7 @@ export function ProductPurchase({ product }: { product: Product }) {
     const url = new URL(window.location.pathname + window.location.search, window.location.origin).toString();
     try {
       if (navigator.share) {
-        await navigator.share({ title: product.title, url });
+        await navigator.share({ title: product.title, text: `${product.title}\n${url}`, url });
       } else {
         await navigator.clipboard.writeText(url);
         setShared(true);
