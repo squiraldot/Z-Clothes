@@ -120,7 +120,7 @@ export function Header() {
         </nav>
         <div className="header-actions">
           <button aria-label="Search" onClick={()=>setSearchOpen(true)}><MagnifyingGlass size={20}/></button>
-          {authUser && <Notifications />}
+          <Notifications enabled={!!authUser} />
           <button aria-label={authUser ? 'Open account' : 'Sign in'} onClick={openAccount}>
             <UserCircle size={21}/>
           </button>
