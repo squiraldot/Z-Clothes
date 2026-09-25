@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { CheckCircle, Minus, Plus, Trash, X } from '@phosphor-icons/react';
 import { useEffect, useMemo, useState } from 'react';
-import { cartItemKey, readCart, writeCart, type CartItem } from '@/lib/shop';
+import { cartItemKey, readCart, writeCart, setCart, type CartItem } from '@/lib/shop';
 import CheckoutAddressPicker from '@/components/CheckoutAddressPicker';
 
 export default function Checkout(){
@@ -11,6 +11,7 @@ export default function Checkout(){
  const [showSuccess,setShowSuccess]=useState(false);
  const [creatingOrder,setCreatingOrder]=useState(false);
  const [orderNumber,setOrderNumber]=useState('');
+ const [orderId,setOrderId]=useState('');
  const [orderError,setOrderError]=useState('');
  const [addressId,setAddressId]=useState('');
 
@@ -37,6 +38,9 @@ export default function Checkout(){
    if(response.status===401){window.location.href='/auth/login?next=/checkout';return;}
    if(!response.ok) throw new Error(data.error||'Unable to create your order.');
    setOrderNumber(data.order.order_number);
+   setOrderId(data.order.id);
+   setCart([]);
+   setItems([]);
    setShowSuccess(true);
   } catch(error) { setOrderError(error instanceof Error ? error.message : 'Unable to create your order.'); }
   finally { setCreatingOrder(false); }
@@ -52,6 +56,6 @@ export default function Checkout(){
    {orderError&&<p className="checkout-note">{orderError}</p>}<p className="checkout-note">Payment checkout is paused until verification. Your delivery address is saved securely with your order draft.</p></aside>
    </div>
   </div>}
-  {showSuccess&&<div className="checkout-modal" role="dialog" aria-modal="true" onClick={()=>setShowSuccess(false)}><div className="checkout-modal-card" onClick={e=>e.stopPropagation()}><button className="modal-close" onClick={()=>setShowSuccess(false)} aria-label="Close"><X size={20}/></button><CheckCircle size={58} weight="fill"/><span className="eyebrow dark">Z-CLOTHES</span><h2>Congratulations 🎉</h2><p>Your order draft <strong>{orderNumber}</strong> is saved to your account. Secure payments will be available after verification.</p><button className="btn dark" onClick={()=>setShowSuccess(false)}>Continue shopping</button></div></div>}
+  {showSuccess&&<div className="checkout-modal" role="dialog" aria-modal="true" onClick={()=>setShowSuccess(false)}><div className="checkout-modal-card" onClick={e=>e.stopPropagation()}><button className="modal-close" onClick={()=>setShowSuccess(false)} aria-label="Close"><X size={20}/></button><CheckCircle size={58} weight="fill"/><span className="eyebrow dark">Z-CLOTHES</span><h2>Congratulations 🎉</h2><p>Your order draft <strong>{orderNumber}</strong> is saved to your account. Secure payments will be available after verification.</p><div className="modal-actions"><Link className="btn dark" href={'/account/orders/'+orderId}>View order</Link><Link className="btn light" href="/products">Continue shopping</Link></div></div></div>}
  </main>
 }
