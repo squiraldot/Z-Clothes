@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'blogger.googleusercontent.com' },
       { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
     ],
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 86400,
   },
   async headers() {
     return [
