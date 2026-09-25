@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { ArrowsOut, CaretLeft, CaretRight, X } from '@phosphor-icons/react';
+import { CaretLeft, CaretRight, X } from '@phosphor-icons/react';
 
 export function ProductGallery({ title, category, images }: { title:string; category:string; images:string[] }) {
   const list = images.filter(Boolean);
@@ -34,7 +34,6 @@ export function ProductGallery({ title, category, images }: { title:string; cate
         <button type="button" className="gallery-zoom-trigger" onClick={() => setZoomed(true)} aria-label="Open product image viewer">
           <Image className="main-product-image" src={current} alt={title} fill priority sizes="(max-width: 900px) 100vw, 55vw" quality={85} />
           <span className="gallery-label">Z-CLOTHES / {category}</span>
-          <span className="gallery-zoom-hint" title="View full image" aria-hidden="true"><ArrowsOut size={17}/></span>
         </button>
       </div>
       {list.length > 1 && <div className="thumb-row" aria-label="Product images">
