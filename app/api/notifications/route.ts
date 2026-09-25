@@ -18,7 +18,8 @@ export async function PATCH(request:Request){
  try{body=await request.json()}catch{return NextResponse.json({error:'Invalid request.'},{status:400})}
  const now=new Date().toISOString();
  const q=supabase.from('notifications').update({read_at:now}).eq('user_id',user.id);
- const {error}=body.all?q:q.eq('id',String(body.id||''));
+ const result=body.all ? await q : await q.eq('id',String(body.id||''));
+ const {error}=result;
  if(error)return NextResponse.json({error:'Unable to update notification.'},{status:400});
  return NextResponse.json({ok:true});
 }
