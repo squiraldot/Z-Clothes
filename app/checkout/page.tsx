@@ -73,7 +73,17 @@ export default function Checkout(){
    <div style={{display:'grid',gap:14}}>
     <CheckoutAddressPicker value={addressId} onChange={setAddressId}/>
    <div className="cart-list">{items.map(x=><div className="cart-row" key={cartItemKey(x)}><img src={x.image} alt=""/><div><h3>{x.title}</h3><p>₹{x.price.toLocaleString('en-IN')}</p>{(x.color||x.size)&&<div className="cart-variant">{[x.color,x.size].filter(Boolean).join(' · ')}</div>}<div className="cart-qty"><button onClick={()=>change(x,-1)} aria-label="Decrease"><Minus size={12}/></button><span>{x.quantity}</span><button onClick={()=>change(x,1)} aria-label="Increase"><Plus size={12}/></button></div><button className="remove-item" onClick={()=>remove(x)}><Trash size={12}/> Remove</button></div><strong>₹{(x.price*x.quantity).toLocaleString('en-IN')}</strong></div>)}</div>
-   <aside className="summary"><span className="eyebrow dark">ORDER SUMMARY</span><div><span>Subtotal</span><b>₹{total.toLocaleString('en-IN')}</b></div><div><span>Shipping</span><b>Free</b></div><hr/><div className="summary-total"><span>Total</span><b>₹{total.toLocaleString('en-IN')}</b></div><button className="dodo-btn" onClick={createOrder} disabled={creatingOrder}>{creatingOrder ? 'Creating order…' : 'Continue'} <span>→</span></button>
+   <aside className="summary"><span className="eyebrow dark">ORDER SUMMARY</span><div><span>Subtotal</span><b>₹{subtotal.toLocaleString('en-IN')}</b></div>
+   <div className="coupon-box">
+    <div className="coupon-row">
+      <input value={couponCode} onChange={e=>{setCouponCode(e.target.value.toUpperCase());setCouponError('')}} placeholder="Coupon code" maxLength={40} disabled={!!appliedCoupon} aria-label="Coupon code"/>
+      {appliedCoupon ? <button type="button" onClick={removeCoupon}>Remove</button> : <button type="button" onClick={applyCoupon} disabled={couponLoading}>{couponLoading?'Applying…':'Apply'}</button>}
+    </div>
+    {couponError&&<p>{couponError}</p>}
+    {appliedCoupon&&<small>Coupon applied — you save ₹{discount.toLocaleString('en-IN')}.</small>}
+   </div>
+   {discount>0&&<div className="summary-discount"><span>Coupon · {appliedCoupon?.code}</span><b>−₹{discount.toLocaleString('en-IN')}</b></div>}
+   <div><span>Shipping</span><b>Free</b></div><hr/><div className="summary-total"><span>Total</span><b>₹{total.toLocaleString('en-IN')}</b></div><button className="dodo-btn" onClick={createOrder} disabled={creatingOrder}>{creatingOrder ? 'Creating order…' : 'Continue'} <span>→</span></button>
    {orderError&&<p className="checkout-note">{orderError}</p>}<p className="checkout-note">Payment checkout is paused until verification. Your delivery address is saved securely with your order draft.</p></aside>
    </div>
   </div>}
