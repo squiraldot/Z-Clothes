@@ -29,7 +29,7 @@ export default function Checkout(){
   if(!items.length || creatingOrder) return;
   setCreatingOrder(true); setOrderError('');
   try {
-   const response=await fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items})});
+   const response=await fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items:items.map(({productId,quantity,color,size})=>({productId,quantity,color,size}))})});
    const data=await response.json();
    if(response.status===401){window.location.href='/auth/login?next=/checkout';return;}
    if(!response.ok) throw new Error(data.error||'Unable to create your order.');
