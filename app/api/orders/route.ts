@@ -1,42 +1,43 @@
 import { NextResponse } from 'next/server';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { getProducts } from '@/lib/blogger';
 
-type BodyItem = {
-  productId?: string;
-  title?: string;
-  price?: number;
-  image?: string;
-  quantity?: number;
-  color?: string;
-  size?: string;
-};
+type BodyItem = { productId?: string; quantity?: number; color?: string; size?: string };
 
 export async function POST(request: Request) {
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-
   if (!user) return NextResponse.json({ error: 'Authentication required.' }, { status: 401 });
 
   let body: { items?: BodyItem[] };
   try { body = await request.json(); }
   catch { return NextResponse.json({ error: 'Invalid request.' }, { status: 400 }); }
 
-  const rawItems = Array.isArray(body.items) ? body.items : [];
-  const items = rawItems.map((item) => ({
-    productId: String(item.productId || ''),
-    title: String(item.title || '').trim(),
-    price: Number(item.price),
-    image: String(item.image || ''),
-    quantity: Math.floor(Number(item.quantity)),
-    color: item.color ? String(item.color) : null,
-    size: item.size ? String(item.size) : null,
-  })).filter((item) =>
-    item.productId && item.title && item.image &&
-    Number.isFinite(item.price) && item.price >= 0 &&
-    Number.isInteger(item.quantity) && item.quantity > 0
-  );
+  const rawItems = Array.isArray(body.items) ? body.items.slice(0, 50) : [];
+  if (!rawItems.length) return NextResponse.json({ error: 'Your bag is empty.' }, { status: 400 });
 
-  if (!items.length) return NextResponse.json({ error: 'Your bag is empty.' }, { status: 400 });
+  const products = await getProducts();
+  const items = rawItems.map((item) => {
+    const productId = String(item.productId || '');
+    const product = products.find((candidate) => candidate.id === productId);
+    const quantity = Math.floor(Number(item.quantity));
+    const color = item.color ? String(item.color) : null;
+    const size = item.size ? String(item.size) : null;
+    const validColor = !color || product?.colors.includes(color);
+    const validSize = !size || product?.sizes.includes(size);
+    if (!product || !Number.isInteger(quantity) || quantity < 1 || quantity > 20 || !validColor || !validSize) return null;
+    return {
+      productId: product.id,
+      title: product.title,
+      price: Number(product.price),
+      image: product.image,
+      quantity,
+      color,
+      size,
+    };
+  }).filter((item): item is NonNullable<typeof item> => item !== null);
+
+  if (!items.length) return NextResponse.json({ error: 'Your bag contains unavailable items.' }, { status: 400 });
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const orderNumber = 'ZC-' + Date.now().toString(36).toUpperCase() + '-' + crypto.randomUUID().slice(0, 6).toUpperCase();
