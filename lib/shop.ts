@@ -37,14 +37,14 @@ export function cartItemKey(item: Pick<CartItem, 'productId' | 'color' | 'size'>
   return [item.productId, item.color || '', item.size || ''].join('::');
 }
 
-export function addToCart(product: Product, options?: { color?: string; size?: string }) {
+export function addToCart(product: Product, options?: { color?: string; size?: string; quantity?: number }) {
   const current = readCart();
   const nextItem: CartItem = {
     productId: product.id,
     title: product.title,
     price: product.price,
     image: product.image,
-    quantity: 1,
+    quantity: Math.max(1, Math.min(20, Math.floor(options?.quantity || 1))),
     color: options?.color || product.colors?.[0] || '',
     size: options?.size || product.sizes?.[0] || '',
     dodoProductId: product.dodoProductId || '',
