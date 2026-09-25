@@ -91,10 +91,12 @@ export default function ProductsPage(){
       <div className="discovery-toolbar">
         <button className={filtersOpen?'filter-toggle active':'filter-toggle'} type="button" onClick={()=>setFiltersOpen(!filtersOpen)}><Funnel size={15}/> Filters {activeCount>0&&<span>{activeCount}</span>}</button>
         <div className="quick-labels">{allLabels.slice(0,5).map(label=><button key={label} type="button" className={q.toLowerCase()===label.toLowerCase()?'active':''} onClick={()=>setQ(label)}>{label}</button>)}</div>
-        <label className="sort-control"><span>Sort by</span><select value={sort} onChange={e=>setSort(e.target.value as typeof SORTS[number])}>{SORTS.map(item=><option key={item}>{item}</option>)}</select><CaretDown size={14}/></label>
+        <label className="sort-control"><span>Sort by</span><select aria-label="Sort products" value={sort} onChange={e=>setSort(e.target.value as typeof SORTS[number])}>{SORTS.map(item=><option key={item}>{item}</option>)}</select><CaretDown size={14}/></label>
       </div>
 
+      {filtersOpen&&<button className="filter-backdrop" type="button" aria-label="Close filters" onClick={()=>setFiltersOpen(false)}/>}
       <div className={filtersOpen?'filter-panel open':'filter-panel'}>
+        <div className="filter-panel-head"><div><span className="eyebrow dark">REFINE</span><h3>Find your fit.</h3></div><button type="button" onClick={()=>setFiltersOpen(false)} aria-label="Close filters">×</button></div>
         <div className="filter-group"><b>Category</b><div className="filter-options">{cats.map(c=><button key={c} type="button" className={category===c?'selected':''} onClick={()=>setCategory(c)}>{c}</button>)}</div></div>
         {allSizes.length>0&&<div className="filter-group"><b>Size</b><div className="filter-options">{allSizes.map(size=><button key={size} type="button" className={sizes.includes(size)?'selected':''} onClick={()=>toggle(sizes,size,setSizes)}>{size}</button>)}</div></div>}
         {allColors.length>0&&<div className="filter-group"><b>Color</b><div className="filter-options">{allColors.map(color=><button key={color} type="button" className={colors.includes(color)?'selected':''} onClick={()=>toggle(colors,color,setColors)}>{color}</button>)}</div></div>}
