@@ -3,13 +3,14 @@ import { notFound } from 'next/navigation';
 import { getProduct } from '@/lib/blogger';
 import { ProductPurchase } from '@/components/ProductPurchase';
 import { ProductGallery } from '@/components/ProductGallery';
+import { sanitizeProductHtml } from '@/lib/sanitize-html';
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://z-clothes-sia-sprides-projects.vercel.app';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProduct(slug);
-  if (!product) return { title: 'Product not found' };
+  if (!product) return { title: 'Product not found', robots: { index: false, follow: true } };
   return {
     title: product.title,
     description: product.description,
@@ -19,7 +20,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description: product.description,
       type: 'website',
       siteName: 'Z-Clothes',
+      url: `${SITE}/products/${product.slug}`,
       images: product.image ? [{ url: product.image, alt: product.title }] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${product.title} — Z-Clothes`,
+      description: product.description,
+      images: product.image ? [product.image] : [],
     },
   };
 }
@@ -30,6 +38,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   if (!p) return notFound();
 
   const galleryImages = [p.image, ...p.images.filter((image) => image !== p.image)];
+  const safeContent = sanitizeProductHtml(p.contentHtml || '<p>Premium materials, relaxed proportions and a modern Z-Clothes silhouette.</p>');
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -43,6 +52,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       '@type': 'Offer',
       priceCurrency: p.currency || 'INR',
       price: p.price,
+      availability: 'https://schema.org/InStock',
       url: `${SITE}/products/${p.slug}`,
     },
   };
@@ -58,7 +68,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <p className="lead">{p.description}</p>
         <ProductPurchase product={p} />
         <div className="service-grid"><span>◈<b>Free Shipping</b><small>Across India</small></span><span>◇<b>Payments</b><small>Launching soon</small></span><span>○<b>Easy Returns</b><small>Within 7 days</small></span></div>
-        <details open><summary>Product details</summary><div className="rich" dangerouslySetInnerHTML={{__html:p.contentHtml||'<p>Premium materials, relaxed proportions and a modern Z-Clothes silhouette.</p>'}}/></details>
+        <details open><summary>Product details</summary><div className="rich" dangerouslySetInnerHTML={{__html:safeContent}} /></details>
         <details><summary>Shipping & returns</summary><div className="rich"><p>Free shipping across India. Returns are accepted within 7 days for eligible unworn items.</p></div></details>
       </div>
     </main>
