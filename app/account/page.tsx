@@ -1,15 +1,22 @@
+'use server';
+
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { AccountActions } from '@/components/AccountActions';
+import { ProfileForm } from '@/components/ProfileForm';
 
 export default async function AccountPage() {
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect('/auth/login?next=/account');
-  }
+  if (!user) redirect('/auth/login?next=/account');
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('id, full_name, phone, avatar_url, created_at, updated_at')
+    .eq('id', user.id)
+    .maybeSingle();
 
   return (
     <main className="account-page">
@@ -24,11 +31,15 @@ export default async function AccountPage() {
         </div>
 
         <div className="account-grid">
-          <section className="account-panel">
+          <section className="account-panel account-profile-panel">
             <span className="eyebrow dark">PROFILE</span>
-            <h2>Your profile is ready.</h2>
-            <p>Personal details, saved addresses and preferences will live here as the account system grows.</p>
-            <span className="account-status">AUTHENTICATED</span>
+            <h2>Make it yours.</h2>
+            <p>Keep your name and contact details ready for future shopping, addresses and orders.</p>
+            <ProfileForm
+              userId={user.id}
+              initialName={profile?.full_name ?? ''}
+              initialPhone={profile?.phone ?? ''}
+            />
           </section>
 
           <section className="account-panel">
