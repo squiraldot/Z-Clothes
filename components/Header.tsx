@@ -9,6 +9,7 @@ import { CartDrawer } from '@/components/CartDrawer';
 import { readCart, readWishlist } from '@/lib/shop';
 import { createSupabaseBrowserClient } from '@/lib/supabase/browser';
 import { syncWishlist } from '@/lib/wishlist';
+import { syncCart, syncCartToRemote } from '@/lib/cart-sync';
 
 export function Header() {
   const router = useRouter();
