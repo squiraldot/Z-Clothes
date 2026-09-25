@@ -5,17 +5,20 @@ import { Heart } from '@phosphor-icons/react';
 import { useEffect, useMemo, useState } from 'react';
 import { ProductCard } from '@/components/ProductCard';
 import { readWishlist } from '@/lib/shop';
+import { syncWishlist } from '@/lib/wishlist';
+import { createSupabaseBrowserClient } from '@/lib/supabase/browser';
 import type { Product } from '@/lib/types';
 
 export default function WishlistClient() {
   const [products, setProducts] = useState<Product[]>([]);
   const [ids, setIds] = useState<string[]>([]);
   useEffect(() => {
-    setIds(readWishlist());
+    let active = true;
+    syncWishlist().then((next) => { if (active) setIds(next); }).catch(() => { if (active) setIds(readWishlist()); });
     fetch('/api/products').then((r) => r.json()).then((data) => setProducts(Array.isArray(data) ? data : []));
     const handler = () => setIds(readWishlist());
     window.addEventListener('zclothes:wishlist-updated', handler);
-    return () => window.removeEventListener('zclothes:wishlist-updated', handler);
+    return () => { active = false; window.removeEventListener('zclothes:wishlist-updated', handler); };
   }, []);
   const saved = useMemo(() => products.filter((product) => ids.includes(product.id)), [products, ids]);
   return <main className="page wishlist-page">
