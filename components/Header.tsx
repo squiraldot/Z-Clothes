@@ -65,6 +65,14 @@ export function Header() {
   }, []);
 
   useEffect(() => {
+    if (!authUser) return;
+    syncCart().catch(() => undefined);
+    const handler = () => syncCartToRemote().catch(() => undefined);
+    window.addEventListener('zclothes:cart-updated', handler);
+    return () => window.removeEventListener('zclothes:cart-updated', handler);
+  }, [authUser]);
+
+  useEffect(() => {
     document.body.style.overflow = searchOpen || accountOpen || bagOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [searchOpen, accountOpen, bagOpen]);
