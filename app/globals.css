@@ -596,3 +596,43 @@ html,body{max-width:100%;overflow-x:hidden}
  .lifecycle-dot{margin:0}
  .lifecycle-step>div{padding-left:5px}
 }
+
+
+/* Phase 28 — customer reviews & ratings */
+.reviews-section{grid-column:1/-1;padding:70px 7vw 95px;background:var(--cream);border-top:1px solid var(--line)}
+.reviews-heading{max-width:1180px;margin:0 auto 32px;display:flex;align-items:end;justify-content:space-between;gap:30px}
+.reviews-heading h2{font-family:Georgia,serif;font-size:52px;font-weight:400;letter-spacing:-.04em;margin:12px 0 0}
+.review-summary{display:flex;align-items:center;gap:12px}
+.review-summary strong{font-family:Georgia,serif;font-size:30px;font-weight:400}
+.review-summary small{font-size:10px;color:var(--muted)}
+.review-stars{display:inline-flex;gap:2px;color:#111}
+.reviews-layout{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.35fr .65fr;gap:14px}
+.reviews-list,.review-form-card{background:#fff;border:1px solid var(--line)}
+.review-card{padding:24px 28px;border-bottom:1px solid var(--line)}
+.review-card:last-child{border-bottom:0}
+.review-card-top{display:flex;align-items:center;justify-content:space-between;gap:15px}
+.review-card-top>span:last-child{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.review-card h3{font-size:14px;font-weight:500;margin:16px 0 7px}
+.review-card p,.reviews-empty p,.review-form-card p{font-size:11px;color:var(--muted);line-height:1.7;margin:0}
+.reviews-empty{padding:45px 28px}
+.review-form-card{padding:30px}
+.review-form-card h3{font-family:Georgia,serif;font-size:30px;font-weight:400;letter-spacing:-.03em;margin:13px 0 20px}
+.review-form-card form{display:grid;gap:11px}
+.rating-picker{display:flex;gap:2px;margin-bottom:5px}
+.rating-picker button{display:grid;place-items:center;border:0;background:transparent;padding:2px;color:#bdb8af;cursor:pointer}
+.rating-picker button.active{color:#111}
+.review-form-card input,.review-form-card textarea{width:100%;border:1px solid var(--line);background:var(--paper);padding:13px 14px;outline:0;font-size:12px;resize:vertical}
+.review-form-card input:focus,.review-form-card textarea:focus{border-color:#111}
+.review-form-card .btn{justify-content:center;margin-top:4px}
+.review-message{font-size:10px!important;color:#40543a!important}
+@media(max-width:800px){
+ .reviews-section{padding:55px 5vw 75px}
+ .reviews-heading{align-items:flex-start;flex-direction:column}
+ .reviews-heading h2{font-size:42px}
+ .reviews-layout{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+ .review-card{padding:21px}
+ .review-form-card{padding:23px}
+ .review-card-top{align-items:flex-start;flex-direction:column}
+}
