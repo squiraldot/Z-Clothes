@@ -4,6 +4,8 @@ import { getProduct } from '@/lib/blogger';
 import { ProductPurchase } from '@/components/ProductPurchase';
 import { ProductGallery } from '@/components/ProductGallery';
 import { sanitizeProductHtml } from '@/lib/sanitize-html';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { ProductReviews } from '@/components/ProductReviews';
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://z-clothes-sia-sprides-projects.vercel.app';
 
@@ -39,6 +41,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   const galleryImages = [p.image, ...p.images.filter((image) => image !== p.image)];
   const safeContent = sanitizeProductHtml(p.contentHtml || '<p>Premium materials, relaxed proportions and a modern Z-Clothes silhouette.</p>');
+  const supabase = await createSupabaseServerClient();
+  const { data: reviews } = await supabase.from('product_reviews').select('id,rating,title,body,created_at').eq('product_id', p.id).order('created_at', { ascending: false }).limit(50);
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -71,6 +75,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <details open><summary>Product details</summary><div className="rich" dangerouslySetInnerHTML={{__html:safeContent}} /></details>
         <details><summary>Shipping & returns</summary><div className="rich"><p>Free shipping across India. Returns are accepted within 7 days for eligible unworn items.</p></div></details>
       </div>
+      <ProductReviews productId={p.id} reviews={reviews || []} />
     </main>
   );
 }
