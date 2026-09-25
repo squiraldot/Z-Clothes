@@ -63,6 +63,12 @@ export type Database = {
         Update: { id?:string; coupon_id?:string; user_id?:string; order_id?:string; discount_amount?:number; created_at?:string };
         Relationships: [];
       };
+      return_requests: {
+        Row: { id:string; order_id:string; user_id:string; reason:string; details:string|null; status:string; created_at:string; updated_at:string };
+        Insert: { id?:string; order_id:string; user_id:string; reason:string; details?:string|null; status?:string; created_at?:string; updated_at?:string };
+        Update: { id?:string; order_id?:string; user_id?:string; reason?:string; details?:string|null; status?:string; created_at?:string; updated_at?:string };
+        Relationships: [];
+      };
       cart_items: {
         Row: { user_id:string; item_key:string; product_id:string; title:string; price:number; image:string; quantity:number; color:string|null; size:string|null; dodo_product_id:string|null; created_at:string; updated_at:string };
         Insert: { user_id:string; item_key:string; product_id:string; title:string; price:number; image:string; quantity:number; color?:string|null; size?:string|null; dodo_product_id?:string|null; created_at?:string; updated_at?:string };
