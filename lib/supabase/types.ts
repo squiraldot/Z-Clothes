@@ -36,6 +36,42 @@ export type Database = {
         Update: { user_id?: string; product_id?: string; created_at?: string };
         Relationships: [];
       };
+      orders: {
+        Row: {
+          id: string; user_id: string; order_number: string; status: string;
+          currency: string; subtotal: number; shipping: number; total: number;
+          email: string | null; created_at: string; updated_at: string;
+        };
+        Insert: {
+          id?: string; user_id: string; order_number: string; status?: string;
+          currency?: string; subtotal: number; shipping?: number; total: number;
+          email?: string | null; created_at?: string; updated_at?: string;
+        };
+        Update: {
+          id?: string; user_id?: string; order_number?: string; status?: string;
+          currency?: string; subtotal?: number; shipping?: number; total?: number;
+          email?: string | null; created_at?: string; updated_at?: string;
+        };
+        Relationships: [];
+      };
+      order_items: {
+        Row: {
+          id: string; order_id: string; product_id: string; title: string;
+          price: number; quantity: number; image: string; color: string | null;
+          size: string | null; created_at: string;
+        };
+        Insert: {
+          id?: string; order_id: string; product_id: string; title: string;
+          price: number; quantity: number; image: string; color?: string | null;
+          size?: string | null; created_at?: string;
+        };
+        Update: {
+          id?: string; order_id?: string; product_id?: string; title?: string;
+          price?: number; quantity?: number; image?: string; color?: string | null;
+          size?: string | null; created_at?: string;
+        };
+        Relationships: [];
+      };
       cart_items: {
         Row: {
           user_id: string;
