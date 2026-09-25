@@ -71,3 +71,9 @@ export function toggleWishlist(productId: string) {
   window.dispatchEvent(new CustomEvent('zclothes:wishlist-updated'));
   return next;
 }
+
+
+export function setWishlist(items: string[]) {
+  localStorage.setItem(WISHLIST_KEY, JSON.stringify([...new Set(items)]));
+  window.dispatchEvent(new CustomEvent('zclothes:wishlist-updated'));
+}
