@@ -58,3 +58,15 @@ export async function toggleRemoteWishlist(productId: string) {
     return next;
   });
 }
+
+export async function clearRemoteWishlist() {
+  return enqueueWishlist(async () => {
+    const supabase = createSupabaseBrowserClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) { setWishlist([]); return []; }
+    const { error } = await supabase.from('wishlists').delete().eq('user_id', user.id);
+    if (error) throw error;
+    setWishlist([]);
+    return [];
+  });
+}
