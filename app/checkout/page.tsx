@@ -14,6 +14,10 @@ export default function Checkout(){
  const [orderId,setOrderId]=useState('');
  const [orderError,setOrderError]=useState('');
  const [addressId,setAddressId]=useState('');
+ const [couponCode,setCouponCode]=useState('');
+ const [appliedCoupon,setAppliedCoupon]=useState<{code:string;discount:number}|null>(null);
+ const [couponError,setCouponError]=useState('');
+ const [couponLoading,setCouponLoading]=useState(false);
 
  useEffect(()=>{
    setItems(readCart());
@@ -22,18 +26,35 @@ export default function Checkout(){
    return()=>window.removeEventListener('zclothes:cart-updated',handler);
  },[]);
 
- const total=useMemo(()=>items.reduce((s,x)=>s+x.price*x.quantity,0),[items]);
+ const subtotal=useMemo(()=>items.reduce((s,x)=>s+x.price*x.quantity,0),[items]);
+ const discount=appliedCoupon?.discount || 0;
+ const total=Math.max(0,subtotal-discount);
 
  function save(next:CartItem[]){setItems(next);writeCart(next)}
  function remove(item:CartItem){save(items.filter(x=>cartItemKey(x)!==cartItemKey(item)))}
  function change(item:CartItem,delta:number){save(items.map(x=>cartItemKey(x)===cartItemKey(item)?{...x,quantity:Math.max(1,x.quantity+delta)}:x))}
+
+ async function applyCoupon(){
+  if(!couponCode.trim() || couponLoading) return;
+  setCouponLoading(true); setCouponError('');
+  try {
+   const response=await fetch('/api/coupons',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:couponCode,subtotal})});
+   const data=await response.json();
+   if(response.status===401){window.location.href='/auth/login?next=/checkout';return;}
+   if(!response.ok) throw new Error(data.error || 'Unable to apply this coupon.');
+   setAppliedCoupon({code:data.coupon.coupon_code,discount:Number(data.coupon.discount_amount)});
+   setCouponCode(data.coupon.coupon_code);
+  } catch(error){setAppliedCoupon(null);setCouponError(error instanceof Error?error.message:'Unable to apply this coupon.');}
+  finally{setCouponLoading(false);}
+ }
+ function removeCoupon(){setAppliedCoupon(null);setCouponError('');setCouponCode('')}
 
  async function createOrder(){
   if(!items.length || creatingOrder) return;
   if(!addressId){setOrderError('Please select a delivery address.');return;}
   setCreatingOrder(true); setOrderError('');
   try {
-   const response=await fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({addressId,items:items.map(({productId,quantity,color,size})=>({productId,quantity,color,size}))})});
+   const response=await fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({addressId,couponCode:appliedCoupon?.code || '',items:items.map(({productId,quantity,color,size})=>({productId,quantity,color,size}))})});
    const data=await response.json();
    if(response.status===401){window.location.href='/auth/login?next=/checkout';return;}
    if(!response.ok) throw new Error(data.error||'Unable to create your order.');
