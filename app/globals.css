@@ -988,3 +988,9 @@ html,body{max-width:100%;overflow-x:hidden}
  .account-shortcut-grid{grid-template-columns:1fr}
  .account-shortcut-grid>a:nth-child(odd),.account-shortcut-grid>a:nth-child(even){padding:15px 4px;border-right:0}
 }
+
+/* Phase 34 follow-up — account cleanup */
+.account-view-all{display:inline-flex!important;align-items:center;gap:9px;padding:10px 0;border-bottom:1px solid #111;text-transform:uppercase;letter-spacing:.1em;font-size:9px;color:#111!important;text-decoration:none!important;white-space:nowrap}
+.account-view-all svg{transition:transform .2s ease}
+.account-view-all:hover svg{transform:translateX(3px)}
+@media(max-width:560px){.account-view-all{font-size:8px;padding-top:6px}}
