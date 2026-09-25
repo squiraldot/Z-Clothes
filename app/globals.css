@@ -742,3 +742,41 @@ html,body{max-width:100%;overflow-x:hidden}
 .price-filter input{width:100%;accent-color:#111;cursor:pointer}
 .price-filter>div{display:flex;justify-content:space-between;color:var(--muted);font-size:8px;margin-top:5px}
 .clear-filters{border:0;background:none;color:#8c4037;text-align:left;padding:0;font:inherit;font-size:9px;text-decoration:underline;text-underline-offset:4px;cursor:pointer;align-self:end}
+
+
+/* Phase 32 — responsive discovery refinement */
+.filter-backdrop{display:none}
+.filter-panel-head{display:none}
+.filter-done{display:none}
+.sort-control{position:relative}
+.sort-control select{min-width:112px;color:#111;border:1px solid var(--line);background:#fff;padding:9px 28px 9px 11px}
+.discovery-toolbar .sort-control svg{pointer-events:none;margin-left:-28px}
+@media(max-width:700px){
+  .discovery-toolbar{gap:10px;padding:10px 0;margin-bottom:0}
+  .filter-toggle{flex:1;justify-content:center;min-height:44px;padding:10px 12px}
+  .quick-labels{display:none}
+  .discovery-toolbar .sort-control{flex:1;margin-left:0;display:flex;justify-content:space-between;min-width:0}
+  .discovery-toolbar .sort-control>span{display:none}
+  .discovery-toolbar .sort-control select{width:100%;min-width:0;height:44px;padding:0 34px 0 13px;border:1px solid var(--line);background:#fff;font-size:10px;font-weight:600;letter-spacing:.02em}
+  .discovery-toolbar .sort-control svg{margin-left:-29px;margin-right:11px}
+  .filter-backdrop{display:block;position:fixed;inset:0;z-index:90;border:0;background:rgba(16,16,15,.48);padding:0}
+  .filter-panel{position:fixed;z-index:100;left:0;right:0;bottom:0;display:none;grid-template-columns:1fr;background:var(--paper);border:0;border-top:1px solid var(--line);padding:0 20px calc(20px + env(safe-area-inset-bottom));margin:0;max-height:82vh;overflow:auto;box-shadow:0 -20px 60px rgba(0,0,0,.16)}
+  .filter-panel.open{display:grid}
+  .filter-panel-head{display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--paper);padding:20px 0 16px;border-bottom:1px solid var(--line);z-index:2}
+  .filter-panel-head h3{font-family:Georgia,serif;font-size:30px;font-weight:400;letter-spacing:-.04em;margin:7px 0 0}
+  .filter-panel-head button{width:34px;height:34px;border:1px solid var(--line);border-radius:50%;background:#fff;font-size:22px;line-height:1;cursor:pointer}
+  .filter-group{padding:20px 0;border-bottom:1px solid var(--line)}
+  .filter-group>b{font-size:9px;margin-bottom:12px}
+  .filter-options{gap:7px}
+  .filter-options button{padding:10px 13px;background:#fff;font-size:9px}
+  .price-filter input{margin:8px 0}
+  .clear-filters{margin:18px 0 0}
+  .filter-done{display:block;border:0;background:#111;color:#fff;width:100%;height:48px;margin-top:18px;font-size:10px;text-transform:uppercase;letter-spacing:.12em;cursor:pointer}
+}
+@media(max-width:560px){
+  .catalog-topline{margin-bottom:18px}
+  .mobile-search{margin-bottom:18px}
+  .discovery-toolbar{position:relative}
+  .filter-toggle,.discovery-toolbar .sort-control select{min-height:46px;height:46px}
+  .filter-panel{padding-left:18px;padding-right:18px}
+}
