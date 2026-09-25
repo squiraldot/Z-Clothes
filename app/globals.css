@@ -541,3 +541,7 @@ html,body{max-width:100%;overflow-x:hidden}
  .order-item img{width:68px;height:84px}
  .order-item>strong{grid-column:2}
 }
+
+
+/* Phase 26 — checkout confirmation polish */
+.checkout-modal-card .modal-actions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:20px}.checkout-modal-card .modal-actions .btn{min-width:150px;justify-content:center}@media(max-width:520px){.checkout-modal-card .modal-actions{display:grid;width:100%}.checkout-modal-card .modal-actions .btn{width:100%}}
