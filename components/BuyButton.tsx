@@ -6,14 +6,14 @@ import type { Product } from '@/lib/types';
 import { addToCart } from '@/lib/shop';
 import { CheckCircle, LockKey, X } from '@phosphor-icons/react';
 
-type Props = { product: Product; color?: string; size?: string };
+type Props = { product: Product; color?: string; size?: string; quantity?: number };
 
-export function BuyButton({ product, color, size }: Props) {
+export function BuyButton({ product, color, size, quantity = 1 }: Props) {
   const [showCongratulations, setShowCongratulations] = useState(false);
   const [added, setAdded] = useState(false);
 
   function add() {
-    addToCart(product, { color, size });
+    addToCart(product, { color, size, quantity });
     setAdded(true);
     window.setTimeout(() => setAdded(false), 1400);
   }
