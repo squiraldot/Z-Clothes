@@ -6,7 +6,7 @@ import { readWishlist, setWishlist } from '@/lib/shop';
 export async function syncWishlist() {
   const supabase = createSupabaseBrowserClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return [];
+  if (!user) return readWishlist();
 
   const localIds = readWishlist();
   const { data, error } = await supabase
