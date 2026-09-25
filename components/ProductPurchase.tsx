@@ -30,7 +30,7 @@ export function ProductPurchase({ product }: { product: Product }) {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         const next = await toggleRemoteWishlist(product.id);
-        setLiked(next.includes(product.id));
+        setLiked(Boolean(next?.includes(product.id)));
       } else {
         setLiked(toggleWishlist(product.id).includes(product.id));
       }
