@@ -2,6 +2,13 @@ import type { CartItem } from '@/lib/shop';
 import { cartItemKey, readCart, setCart } from '@/lib/shop';
 import { createSupabaseBrowserClient } from '@/lib/supabase/browser';
 
+let cartQueue: Promise<unknown> = Promise.resolve();
+function enqueueCart<T>(task: () => Promise<T>) {
+  const run = cartQueue.then(task, task);
+  cartQueue = run.catch(() => undefined);
+  return run;
+}
+
 function toRow(userId: string, item: CartItem) {
   return {
     user_id: userId,
@@ -31,65 +38,54 @@ function fromRow(row: any): CartItem {
 }
 
 export async function syncCart() {
-  if (typeof window === 'undefined') return [];
-  const supabase = createSupabaseBrowserClient();
-  const { data: userData } = await supabase.auth.getUser();
-  const user = userData.user;
-  if (!user) return readCart();
+  return enqueueCart(async () => {
+    if (typeof window === 'undefined') return [];
+    const supabase = createSupabaseBrowserClient();
+    const { data: userData } = await supabase.auth.getUser();
+    const user = userData.user;
+    if (!user) return readCart();
 
-  const [{ data: remoteRows, error: readError }] = await Promise.all([
-    supabase.from('cart_items').select('*').eq('user_id', user.id),
-  ]);
-  if (readError) throw readError;
+    const { data: remoteRows, error: readError } = await supabase.from('cart_items').select('*').eq('user_id', user.id);
+    if (readError) throw readError;
 
-  const local = readCart();
-  const localKeys = new Set(local.map(cartItemKey));
-  const remoteOnly = (remoteRows ?? []).filter((row: any) => !localKeys.has(row.item_key)).map(fromRow);
-  const merged = [...local, ...remoteOnly];
+    const local = readCart();
+    const localKeys = new Set(local.map(cartItemKey));
+    const remoteOnly = (remoteRows ?? []).filter((row: any) => !localKeys.has(row.item_key)).map(fromRow);
+    const merged = [...local, ...remoteOnly];
 
-  if (merged.length) {
-    const { error } = await supabase
-      .from('cart_items')
-      .upsert(merged.map((item) => toRow(user.id, item)), { onConflict: 'user_id,item_key' });
-    if (error) throw error;
-  }
+    if (merged.length) {
+      const { error } = await supabase.from('cart_items').upsert(merged.map((item) => toRow(user.id, item)), { onConflict: 'user_id,item_key' });
+      if (error) throw error;
+    }
 
-  setCart(merged);
-  return merged;
+    setCart(merged);
+    return merged;
+  });
 }
 
 export async function syncCartToRemote() {
-  if (typeof window === 'undefined') return;
-  const supabase = createSupabaseBrowserClient();
-  const { data: userData } = await supabase.auth.getUser();
-  const user = userData.user;
-  if (!user) return;
+  return enqueueCart(async () => {
+    if (typeof window === 'undefined') return;
+    const supabase = createSupabaseBrowserClient();
+    const { data: userData } = await supabase.auth.getUser();
+    const user = userData.user;
+    if (!user) return;
 
-  const local = readCart();
-  const { data: remoteRows, error: readError } = await supabase
-    .from('cart_items')
-    .select('item_key')
-    .eq('user_id', user.id);
-  if (readError) throw readError;
+    const local = readCart();
+    const { data: remoteRows, error: readError } = await supabase.from('cart_items').select('item_key').eq('user_id', user.id);
+    if (readError) throw readError;
 
-  if (local.length) {
-    const { error } = await supabase
-      .from('cart_items')
-      .upsert(local.map((item) => toRow(user.id, item)), { onConflict: 'user_id,item_key' });
-    if (error) throw error;
-  }
+    if (local.length) {
+      const { error } = await supabase.from('cart_items').upsert(local.map((item) => toRow(user.id, item)), { onConflict: 'user_id,item_key' });
+      if (error) throw error;
+    }
 
-  const localKeys = new Set(local.map(cartItemKey));
-  const staleKeys = (remoteRows ?? [])
-    .map((row: any) => row.item_key)
-    .filter((key: string) => !localKeys.has(key));
+    const localKeys = new Set(local.map(cartItemKey));
+    const staleKeys = (remoteRows ?? []).map((row: any) => row.item_key).filter((key: string) => !localKeys.has(key));
 
-  if (staleKeys.length) {
-    const { error } = await supabase
-      .from('cart_items')
-      .delete()
-      .eq('user_id', user.id)
-      .in('item_key', staleKeys);
-    if (error) throw error;
-  }
+    if (staleKeys.length) {
+      const { error } = await supabase.from('cart_items').delete().eq('user_id', user.id).in('item_key', staleKeys);
+      if (error) throw error;
+    }
+  });
 }
