@@ -15,16 +15,16 @@ export default async function AccountPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/auth/login?next=/account');
 
-  const [{data:profile},{data:orders},{data:addresses},{data:wishlist},{data:notifications}] = await Promise.all([
+  const [{data:profile},{data:orders,count:orderTotal},{data:addresses},{data:wishlist},{data:notifications}] = await Promise.all([
     supabase.from('profiles').select('id,full_name,phone,avatar_url,created_at,updated_at').eq('id',user.id).maybeSingle(),
-    supabase.from('orders').select('id,order_number,status,total,currency,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(3),
+    supabase.from('orders').select('id,order_number,status,total,currency,created_at',{count:'exact'}).eq('user_id',user.id).order('created_at',{ascending:false}).limit(3),
     supabase.from('addresses').select('id,is_default').eq('user_id',user.id),
     supabase.from('wishlists').select('product_id').eq('user_id',user.id),
     supabase.from('notifications').select('id,read_at').eq('user_id',user.id).limit(50),
   ]);
 
   const unread=(notifications??[]).filter(n=>!n.read_at).length;
-  const orderCount=orders?.length ?? 0;
+  const orderCount=orderTotal ?? orders?.length ?? 0;
   const addressCount=addresses?.length ?? 0;
   const wishlistCount=wishlist?.length ?? 0;
 
