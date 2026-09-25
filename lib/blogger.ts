@@ -33,8 +33,22 @@ export const getProducts = cache(async (): Promise<Product[]> => {
   const posts:any[] = [];
   do {
     const url = `${API}/blogs/${encodeURIComponent(blogId)}/posts?key=${encodeURIComponent(key)}&fetchBodies=true&fetchImages=true&maxResults=50&orderBy=published&status=live${pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : ''}`;
-    const res = await fetch(url, { next: { revalidate: 60, tags: ['zclothes-products'] } });
-    if (!res.ok) throw new Error(`Blogger API failed: ${res.status}`);
+    let res: Response | null = null;
+    let lastError: unknown;
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      try {
+        res = await fetch(url, {
+          next: { revalidate: 60, tags: ['zclothes-products'] },
+          signal: AbortSignal.timeout(8000),
+        });
+        if (res.ok) break;
+        lastError = new Error(`Blogger API failed: ${res.status}`);
+      } catch (error) {
+        lastError = error;
+      }
+      if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, 300 * (attempt + 1)));
+    }
+    if (!res?.ok) throw lastError instanceof Error ? lastError : new Error('Blogger API request failed');
     const data = await res.json();
     posts.push(...(data.items ?? []));
     pageToken = data.nextPageToken || '';
