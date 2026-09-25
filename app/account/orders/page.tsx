@@ -20,7 +20,7 @@ export default async function OrdersPage(){
 
   const {data:orders,error}=await supabase
     .from('orders')
-    .select('id,order_number,status,currency,subtotal,shipping,total,email,created_at,updated_at')
+    .select('id,order_number,status,currency,subtotal,shipping,total,email,created_at,updated_at,shipping_city,shipping_state')
     .eq('user_id',user.id)
     .order('created_at',{ascending:false});
 
@@ -44,7 +44,7 @@ export default async function OrdersPage(){
       : <div className="orders-list">{orders.map((order)=>{
         const orderItems=(items??[]).filter((item)=>item.order_id===order.id);
         return <Link href={'/account/orders/'+order.id} className="order-card" key={order.id}>
-          <div className="order-card-head"><div><span className="eyebrow dark">ORDER</span><h2>{order.order_number}</h2><p>{date(order.created_at)}</p></div><span className="order-status">{label(order.status)}</span></div>
+          <div className="order-card-head"><div><span className="eyebrow dark">ORDER</span><h2>{order.order_number}</h2><p>{date(order.created_at)}{order.shipping_city ? ' · '+order.shipping_city : ''}{order.shipping_state ? ', '+order.shipping_state : ''}</p></div><span className="order-status">{label(order.status)}</span></div>
           <div className="order-preview">{orderItems.slice(0,3).map((item)=><img key={item.id} src={item.image} alt="" />)}<div className="order-preview-meta"><span>{orderItems.reduce((sum,item)=>sum+item.quantity,0)} item{orderItems.reduce((sum,item)=>sum+item.quantity,0)===1?'':'s'}</span><strong>{money(Number(order.total),order.currency)}</strong></div></div>
         </Link>
       })}</div>}
