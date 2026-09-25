@@ -675,3 +675,26 @@ html,body{max-width:100%;overflow-x:hidden}
  .return-modal{padding:30px 22px}
  .return-modal h2{font-size:32px}
 }
+
+
+/* Phase 31 — customer notifications */
+.notifications-wrap{position:relative;display:flex}
+.notification-trigger{background:none;border:0;color:#fff;position:relative;display:flex;align-items:center;justify-content:center;cursor:pointer;min-width:24px;min-height:32px}
+.notification-count{position:absolute;right:-6px;top:0;min-width:15px;height:15px;padding:0 4px;border-radius:99px;background:#d7bd95;color:#111;font-size:8px;line-height:15px;text-align:center}
+.notification-backdrop{position:fixed;inset:0;z-index:70;background:transparent;border:0}
+.notification-panel{position:fixed;z-index:80;top:68px;right:24px;width:min(390px,calc(100vw - 28px));max-height:min(620px,calc(100vh - 90px));overflow:auto;background:var(--paper);color:#111;border:1px solid var(--line);box-shadow:0 20px 70px rgba(0,0,0,.18)}
+.notification-head{display:flex;align-items:flex-start;justify-content:space-between;padding:22px 22px 15px;border-bottom:1px solid var(--line)}
+.notification-head h2{font-family:Georgia,serif;font-weight:400;font-size:30px;letter-spacing:-.03em;margin:8px 0 0}
+.notification-head button{border:0;background:transparent;color:#111;cursor:pointer}
+.notification-read-all{display:block;margin:12px 22px 2px  auto;border:0;background:none;color:#6e6a62;font-size:9px;text-transform:uppercase;letter-spacing:.1em;cursor:pointer}
+.notification-list{display:grid}
+.notification-item{display:grid;grid-template-columns:1fr auto;gap:14px;padding:17px 22px;border-top:1px solid var(--line);transition:background .15s}
+.notification-item.unread{background:#f1eee7}
+.notification-item b{font-size:11px;font-weight:600}
+.notification-item p{font-size:10px;line-height:1.55;color:var(--muted);margin:6px 0}
+.notification-item small{font-size:8px;color:#99948b;text-transform:uppercase;letter-spacing:.08em}
+.notification-item>a{align-self:center;font-size:9px;text-transform:uppercase;letter-spacing:.1em;text-decoration:underline;text-underline-offset:4px}
+.notification-empty{padding:45px 22px;margin:0;color:var(--muted);font-size:11px;text-align:center}
+@media(max-width:560px){
+ .notification-panel{top:62px;right:14px;width:calc(100vw - 28px)}
+}
