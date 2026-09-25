@@ -107,6 +107,7 @@ export default function ProductsPage(){
         {allColors.length>0&&<div className="filter-group"><b>Color</b><div className="filter-options">{allColors.map(color=><button key={color} type="button" className={colors.includes(color)?'selected':''} onClick={()=>toggle(colors,color,setColors)}>{color}</button>)}</div></div>}
         {highestPrice>0&&<div className="filter-group price-filter"><b>Maximum price <span>₹{(maxPrice||highestPrice).toLocaleString('en-IN')}</span></b><input type="range" min="0" max={highestPrice} step="100" value={maxPrice||highestPrice} onChange={e=>setMaxPrice(Number(e.target.value)===highestPrice?0:Number(e.target.value))}/><div><span>Any price</span><span>₹{highestPrice.toLocaleString('en-IN')}+</span></div></div>}
         {activeCount>0&&<button type="button" className="clear-filters" onClick={clearFilters}>Clear all filters</button>}
+        <button type="button" className="filter-done" onClick={()=>setFiltersOpen(false)}>Show {filtered.length} pieces</button>
       </div>
 
       {error?<div className="empty error-inline"><p>We could not load the collection right now.</p><button className="drawer-link" onClick={()=>window.location.reload()}>Try again →</button></div>
