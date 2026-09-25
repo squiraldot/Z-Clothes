@@ -63,6 +63,12 @@ export type Database = {
         Update: { id?:string; coupon_id?:string; user_id?:string; order_id?:string; discount_amount?:number; created_at?:string };
         Relationships: [];
       };
+      notifications: {
+        Row: { id:string; user_id:string; type:string; title:string; body:string; order_id:string|null; read_at:string|null; created_at:string };
+        Insert: { id?:string; user_id:string; type:string; title:string; body:string; order_id?:string|null; read_at?:string|null; created_at?:string };
+        Update: { id?:string; user_id?:string; type?:string; title?:string; body?:string; order_id?:string|null; read_at?:string|null; created_at?:string };
+        Relationships: [];
+      };
       return_requests: {
         Row: { id:string; order_id:string; user_id:string; reason:string; details:string|null; status:string; created_at:string; updated_at:string };
         Insert: { id?:string; order_id:string; user_id:string; reason:string; details?:string|null; status?:string; created_at?:string; updated_at?:string };
