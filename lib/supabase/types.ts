@@ -40,12 +40,12 @@ export type Database = {
         Row: {
           id: string; user_id: string; order_number: string; status: string;
           currency: string; subtotal: number; shipping: number; total: number;
-          email: string | null; created_at: string; updated_at: string;
+          email: string | null; created_at: string; updated_at: string;\n          shipping_address_id: string | null; shipping_name: string | null; shipping_phone: string | null;\n          shipping_line1: string | null; shipping_line2: string | null; shipping_landmark: string | null;\n          shipping_city: string | null; shipping_state: string | null; shipping_pincode: string | null;
         };
         Insert: {
           id?: string; user_id: string; order_number: string; status?: string;
           currency?: string; subtotal: number; shipping?: number; total: number;
-          email?: string | null; created_at?: string; updated_at?: string;
+          email?: string | null; created_at?: string; updated_at?: string;\n          shipping_address_id?: string | null; shipping_name?: string | null; shipping_phone?: string | null;\n          shipping_line1?: string | null; shipping_line2?: string | null; shipping_landmark?: string | null;\n          shipping_city?: string | null; shipping_state?: string | null; shipping_pincode?: string | null;\n          shipping_address_id?: string | null; shipping_name?: string | null; shipping_phone?: string | null;\n          shipping_line1?: string | null; shipping_line2?: string | null; shipping_landmark?: string | null;\n          shipping_city?: string | null; shipping_state?: string | null; shipping_pincode?: string | null;
         };
         Update: {
           id?: string; user_id?: string; order_number?: string; status?: string;
