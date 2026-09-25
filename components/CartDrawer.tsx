@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { Minus, Plus, Trash, X } from '@phosphor-icons/react';
 import { useEffect, useMemo, useState } from 'react';
 import { cartItemKey, readCart, writeCart, type CartItem } from '@/lib/shop';
@@ -32,7 +31,7 @@ export function CartDrawer({ open, onClose }: { open:boolean; onClose:()=>void }
       <div className="cart-drawer-head"><div><span className="eyebrow dark">YOUR BAG</span><h2>{count} {count===1?'piece':'pieces'}</h2></div><div className="cart-head-actions">{!!items.length&&<button className="cart-clear" onClick={clearBag}>Clear</button>}<button onClick={onClose} aria-label="Close bag"><X size={22}/></button></div>
       <div className="cart-drawer-list">{!items.length?<div className="cart-empty"><span className="cart-empty-mark">Z</span><h3>Your bag is empty</h3><p>Add something you love and it will appear here.</p><button className="drawer-link" onClick={onClose}>Continue shopping →</button></div>:items.map(item=><div className="drawer-item" key={cartItemKey(item)}>
         <div className="drawer-item-image"><Image src={item.image} alt="" fill sizes="92px"/></div>
-        <div className="drawer-item-info"><div className="drawer-item-top"><Link href={`/products/${item.productId}`} onClick={onClose}><h3>{item.title}</h3></Link><button onClick={()=>remove(item)} aria-label={`Remove ${item.title}`}><Trash size={15}/></button></div><p>₹{item.price.toLocaleString('en-IN')}</p>{(item.color||item.size)&&<div className="drawer-variant">{[item.color,item.size].filter(Boolean).join(' · ')}</div>}<div className="drawer-item-bottom"><div className="qty"><button onClick={()=>change(item,-1)} aria-label="Decrease"><Minus size={12}/></button><span>{item.quantity}</span><button onClick={()=>change(item,1)} aria-label="Increase"><Plus size={12}/></button></div><strong>₹{(item.price*item.quantity).toLocaleString('en-IN')}</strong></div></div>
+        <div className="drawer-item-info"><div className="drawer-item-top"><h3>{item.title}</h3><button onClick={()=>remove(item)} aria-label={`Remove ${item.title}`}><Trash size={15}/></button></div><p>₹{item.price.toLocaleString('en-IN')}</p>{(item.color||item.size)&&<div className="drawer-variant">{[item.color,item.size].filter(Boolean).join(' · ')}</div>}<div className="drawer-item-bottom"><div className="qty"><button onClick={()=>change(item,-1)} aria-label="Decrease"><Minus size={12}/></button><span>{item.quantity}</span><button onClick={()=>change(item,1)} aria-label="Increase"><Plus size={12}/></button></div><strong>₹{(item.price*item.quantity).toLocaleString('en-IN')}</strong></div></div>
       </div>)}</div>
       {!!items.length&&<div className="cart-drawer-foot"><div className="drawer-total"><span>Subtotal</span><strong>₹{total.toLocaleString('en-IN')}</strong></div><p>Shipping calculated at checkout.</p><a href="/checkout" className="drawer-checkout" onClick={onClose}>View bag & checkout <span>→</span></a></div>}
     </aside>
