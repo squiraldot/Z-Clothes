@@ -45,6 +45,12 @@ export type Database = {
         Update: { id?:string; order_id?:string; product_id?:string; title?:string; price?:number; quantity?:number; image?:string; color?:string|null; size?:string|null; created_at?:string };
         Relationships: [];
       };
+      product_reviews: {
+        Row: { id:string; user_id:string; product_id:string; order_id:string; rating:number; title:string|null; body:string|null; created_at:string; updated_at:string };
+        Insert: { id?:string; user_id:string; product_id:string; order_id:string; rating:number; title?:string|null; body?:string|null; created_at?:string; updated_at?:string };
+        Update: { id?:string; user_id?:string; product_id?:string; order_id?:string; rating?:number; title?:string|null; body?:string|null; created_at?:string; updated_at?:string };
+        Relationships: [];
+      };
       cart_items: {
         Row: { user_id:string; item_key:string; product_id:string; title:string; price:number; image:string; quantity:number; color:string|null; size:string|null; dodo_product_id:string|null; created_at:string; updated_at:string };
         Insert: { user_id:string; item_key:string; product_id:string; title:string; price:number; image:string; quantity:number; color?:string|null; size?:string|null; dodo_product_id?:string|null; created_at?:string; updated_at?:string };
