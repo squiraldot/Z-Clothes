@@ -39,6 +39,11 @@ export default function ProductsPage(){
   const highestPrice=useMemo(()=>Math.ceil(Math.max(...products.map(p=>p.price),1000)/500)*500,[products]);
 
   useEffect(()=>{
+    document.body.style.overflow=filtersOpen?'hidden':'';
+    return()=>{document.body.style.overflow=''};
+  },[filtersOpen]);
+
+  useEffect(()=>{
     const url=new URL(window.location.href);
     q?url.searchParams.set('search',q):url.searchParams.delete('search');
     category!=='All'?url.searchParams.set('category',category):url.searchParams.delete('category');
