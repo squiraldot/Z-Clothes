@@ -454,3 +454,13 @@ html,body{max-width:100%;overflow-x:hidden}
   .auth-card h1{font-size:47px}
   .account-heading h1{font-size:50px}
 }
+
+/* Phase 18 — profile */
+.account-profile-panel{grid-column:span 2}
+.profile-form{width:100%;max-width:520px;display:grid;gap:14px;margin-top:4px}
+.profile-form label{display:grid;gap:7px;font-size:9px;text-transform:uppercase;letter-spacing:.12em}
+.profile-form input{width:100%;border:1px solid var(--line);background:var(--paper);padding:13px 14px;outline:0;font-size:13px;text-transform:none;letter-spacing:0}
+.profile-form input:focus{border-color:#111}
+.profile-form button{justify-self:start;margin-top:2px}
+.profile-message{font-size:11px;color:#40543a;margin:0}
+@media(max-width:700px){.account-profile-panel{grid-column:span 1}.profile-form button{width:100%;justify-content:center}}
