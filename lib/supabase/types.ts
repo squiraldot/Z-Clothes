@@ -4,9 +4,9 @@ export type Database = {
   public: {
     Tables: {
       profiles: {
-        Row: { id:string; full_name:string|null; phone:string|null; avatar_url:string|null; created_at:string; updated_at:string };
-        Insert: { id:string; full_name?:string|null; phone?:string|null; avatar_url?:string|null; created_at?:string; updated_at?:string };
-        Update: { id?:string; full_name?:string|null; phone?:string|null; avatar_url?:string|null; created_at?:string; updated_at?:string };
+        Row: { id:string; full_name:string|null; phone:string|null; avatar_url:string|null; role:string; created_at:string; updated_at:string };
+        Insert: { id:string; full_name?:string|null; phone?:string|null; avatar_url?:string|null; role?:string; created_at?:string; updated_at?:string };
+        Update: { id?:string; full_name?:string|null; phone?:string|null; avatar_url?:string|null; role?:string; created_at?:string; updated_at?:string };
         Relationships: [];
       };
       wishlists: {
