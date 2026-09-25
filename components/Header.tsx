@@ -6,6 +6,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import type { User } from '@supabase/supabase-js';
 import { CartDrawer } from '@/components/CartDrawer';
+import Notifications from '@/components/Notifications';
 import { readCart, readWishlist } from '@/lib/shop';
 import { createSupabaseBrowserClient } from '@/lib/supabase/browser';
 import { syncWishlist } from '@/lib/wishlist';
@@ -119,6 +120,7 @@ export function Header() {
         </nav>
         <div className="header-actions">
           <button aria-label="Search" onClick={()=>setSearchOpen(true)}><MagnifyingGlass size={20}/></button>
+          {authUser && <Notifications />}
           <button aria-label={authUser ? 'Open account' : 'Sign in'} onClick={openAccount}>
             <UserCircle size={21}/>
           </button>
