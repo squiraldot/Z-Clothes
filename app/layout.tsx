@@ -1,9 +1,12 @@
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 
-export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://z-clothes-sia-sprides-projects.vercel.app'),
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://z-clothes-sia-sprides-projects.vercel.app';
+
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE),
   title: {
     default: 'Z-Clothes — Wear Your Story',
     template: '%s — Z-Clothes',
@@ -15,10 +18,30 @@ export const metadata = {
   creator: 'Z-Clothes',
   publisher: 'Z-Clothes',
   category: 'fashion',
+  alternates: { canonical: '/' },
+  openGraph: {
+    type: 'website',
+    siteName: 'Z-Clothes',
+    title: 'Z-Clothes — Wear Your Story',
+    description: 'Premium clothing for modern people. Discover the Z-Clothes collection.',
+    url: SITE,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Z-Clothes — Wear Your Story',
+    description: 'Premium clothing for modern people. Discover the Z-Clothes collection.',
+  },
   icons: {
     icon: '/icon.svg',
     apple: '/icon.svg',
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#10100f',
+  colorScheme: 'light',
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
