@@ -25,12 +25,12 @@ export type Database = {
         Row: {
           id:string; user_id:string; order_number:string; status:string; currency:string; subtotal:number; shipping:number; total:number;
           email:string|null; created_at:string; updated_at:string; shipping_address_id:string|null; shipping_name:string|null; shipping_phone:string|null;
-          shipping_line1:string|null; shipping_line2:string|null; shipping_landmark:string|null; shipping_city:string|null; shipping_state:string|null; shipping_pincode:string|null;
+          shipping_line1:string|null; shipping_line2:string|null; shipping_landmark:string|null; shipping_city:string|null; shipping_state:string|null; shipping_pincode:string|null; coupon_id:string|null; coupon_code:string|null; discount:number;
         };
         Insert: {
           id?:string; user_id:string; order_number:string; status?:string; currency?:string; subtotal:number; shipping?:number; total:number;
           email?:string|null; created_at?:string; updated_at?:string; shipping_address_id?:string|null; shipping_name?:string|null; shipping_phone?:string|null;
-          shipping_line1?:string|null; shipping_line2?:string|null; shipping_landmark?:string|null; shipping_city?:string|null; shipping_state?:string|null; shipping_pincode?:string|null;
+          shipping_line1?:string|null; shipping_line2?:string|null; shipping_landmark?:string|null; shipping_city?:string|null; shipping_state?:string|null; shipping_pincode?:string|null; coupon_id?:string|null; coupon_code?:string|null; discount?:number;
         };
         Update: {
           id?:string; user_id?:string; order_number?:string; status?:string; currency?:string; subtotal?:number; shipping?:number; total?:number;
@@ -49,6 +49,18 @@ export type Database = {
         Row: { id:string; user_id:string; product_id:string; order_id:string; rating:number; title:string|null; body:string|null; created_at:string; updated_at:string };
         Insert: { id?:string; user_id:string; product_id:string; order_id:string; rating:number; title?:string|null; body?:string|null; created_at?:string; updated_at?:string };
         Update: { id?:string; user_id?:string; product_id?:string; order_id?:string; rating?:number; title?:string|null; body?:string|null; created_at?:string; updated_at?:string };
+        Relationships: [];
+      };
+      coupons: {
+        Row: { id:string; code:string; discount_type:string; discount_value:number; min_subtotal:number; max_discount:number|null; starts_at:string|null; ends_at:string|null; usage_limit:number|null; per_user_limit:number; active:boolean; created_at:string; updated_at:string };
+        Insert: { id?:string; code:string; discount_type:string; discount_value:number; min_subtotal?:number; max_discount?:number|null; starts_at?:string|null; ends_at?:string|null; usage_limit?:number|null; per_user_limit?:number; active?:boolean; created_at?:string; updated_at?:string };
+        Update: { id?:string; code?:string; discount_type?:string; discount_value?:number; min_subtotal?:number; max_discount?:number|null; starts_at?:string|null; ends_at?:string|null; usage_limit?:number|null; per_user_limit?:number; active?:boolean; created_at?:string; updated_at?:string };
+        Relationships: [];
+      };
+      coupon_redemptions: {
+        Row: { id:string; coupon_id:string; user_id:string; order_id:string; discount_amount:number; created_at:string };
+        Insert: { id?:string; coupon_id:string; user_id:string; order_id:string; discount_amount:number; created_at?:string };
+        Update: { id?:string; coupon_id?:string; user_id?:string; order_id?:string; discount_amount?:number; created_at?:string };
         Relationships: [];
       };
       cart_items: {
