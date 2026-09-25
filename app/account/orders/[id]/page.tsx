@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowLeft, Package } from '@phosphor-icons/react/dist/ssr';
 import { notFound, redirect } from 'next/navigation';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import OrderActions from '@/components/OrderActions';
 
 function money(value:number,currency='INR'){return new Intl.NumberFormat('en-IN',{style:'currency',currency}).format(value);}
 function date(value:string){return new Intl.DateTimeFormat('en-IN',{day:'2-digit',month:'long',year:'numeric'}).format(new Date(value));}
@@ -37,6 +38,7 @@ export default async function OrderDetailPage({params}:{params:Promise<{id:strin
       <div className="order-detail-head"><div><span className="eyebrow dark">ORDER DETAILS</span><h1>{order.order_number}</h1><p>Placed {date(order.created_at)}</p></div><span className="order-status">{label(order.status)}</span></div>
       {(order.status==='cancelled'||order.status==='refunded') ? <section className="order-lifecycle order-lifecycle-terminal"><div><span className="eyebrow dark">ORDER LIFECYCLE</span><h2>{label(order.status)}</h2><p>This order is no longer moving through the active delivery flow.</p></div></section> : order.status!=='draft' && <section className="order-lifecycle"><div className="panel-heading"><span className="eyebrow dark">ORDER LIFECYCLE</span><strong>LIVE STATUS</strong></div><div className="lifecycle-track">{lifecycle.map((step,index)=>{const current=lifecycleIndex(order.status); const active=index<=current; return <div className={`lifecycle-step ${active?'active':''} ${index===current?'current':''}`} key={step.key}><span className="lifecycle-dot" aria-hidden="true"></span><div><b>{step.title}</b><p>{index===current ? (order.status==='pending_payment' ? 'Your order is saved. Payment is not collected yet.' : step.copy) : index<current ? 'Completed' : 'Coming next'}</p></div></div>})}</div></section>}
 
+      <OrderActions orderId={order.id} status={order.status} />
       <div className="order-detail-grid">
         <section className="order-items-panel"><div className="panel-heading"><span className="eyebrow dark">YOUR PIECES</span><strong>{items?.length ?? 0} line item{items?.length===1?'':'s'}</strong></div>
           {items?.map((item)=><div className="order-item" key={item.id}><img src={item.image} alt="" /><div><h2>{item.title}</h2>{(item.color||item.size)&&<p>{[item.color,item.size].filter(Boolean).join(' · ')}</p>}<span>Qty {item.quantity}</span></div><strong>{money(Number(item.price)*item.quantity,order.currency)}</strong></div>)}
