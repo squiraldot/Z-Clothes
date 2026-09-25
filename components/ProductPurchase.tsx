@@ -40,10 +40,10 @@ export function ProductPurchase({ product }: { product: Product }) {
   }
 
   async function shareProduct() {
-    const url = window.location.href;
+    const url = new URL(window.location.pathname + window.location.search, window.location.origin).toString();
     try {
       if (navigator.share) {
-        await navigator.share({ title: product.title, text: product.description, url });
+        await navigator.share({ title: product.title, url });
       } else {
         await navigator.clipboard.writeText(url);
         setShared(true);
