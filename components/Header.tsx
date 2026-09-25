@@ -8,6 +8,7 @@ import type { User } from '@supabase/supabase-js';
 import { CartDrawer } from '@/components/CartDrawer';
 import { readCart, readWishlist } from '@/lib/shop';
 import { createSupabaseBrowserClient } from '@/lib/supabase/browser';
+import { syncWishlist } from '@/lib/wishlist';
 
 export function Header() {
   const router = useRouter();
@@ -43,11 +44,17 @@ export function Header() {
     const supabase = createSupabaseBrowserClient();
 
     supabase.auth.getUser().then(({ data }) => {
-      if (active) setAuthUser(data.user);
+      if (active) {
+        setAuthUser(data.user);
+        if (data.user) syncWishlist().catch(() => undefined);
+      }
     });
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (active) setAuthUser(session?.user ?? null);
+      if (active) {
+        setAuthUser(session?.user ?? null);
+        if (session?.user) syncWishlist().catch(() => undefined);
+      }
     });
 
     return () => {
