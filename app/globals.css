@@ -636,3 +636,15 @@ html,body{max-width:100%;overflow-x:hidden}
  .review-form-card{padding:23px}
  .review-card-top{align-items:flex-start;flex-direction:column}
 }
+
+
+/* Phase 29 — coupons & offers */
+.coupon-box{border-top:1px solid var(--line);padding-top:18px;margin-top:4px}
+.coupon-row{display:grid;grid-template-columns:1fr auto;gap:8px}
+.coupon-row input{min-width:0;border:1px solid var(--line);background:#fff;padding:12px 13px;font:inherit;font-size:10px;text-transform:uppercase;letter-spacing:.08em;outline:0}
+.coupon-row input:focus{border-color:#111}
+.coupon-row button{border:1px solid #111;background:#111;color:#fff;padding:0 15px;font:inherit;font-size:10px;cursor:pointer}
+.coupon-row button:disabled{opacity:.55;cursor:wait}
+.coupon-box p{margin:8px 0 0;color:#9b3c35;font-size:9px;line-height:1.5}
+.coupon-box small{display:block;margin-top:8px;color:#53634d;font-size:9px}
+.summary-discount b{color:#53634d}
