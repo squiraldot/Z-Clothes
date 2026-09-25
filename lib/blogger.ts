@@ -20,7 +20,9 @@ export function parsePost(post: any): Product {
   const colors = (meta(html,'colors') || 'Black').split(',').map((x:string)=>x.trim()).filter(Boolean);
   const dodoProductId = meta(html,'dodo-product-id');
   const slug = (post.url || '').split('/').filter(Boolean).pop() || post.id;
-  return { id: post.id, slug, title: post.title, description: meta(html,'description') || text(html).slice(0,220), price, compareAtPrice: compareAt || undefined, currency: meta(html,'currency') || 'INR', category, labels, image: imgs[0] || 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85', images: imgs.slice(0,6), sizes, colors, dodoProductId, url: post.url, published: post.published, contentHtml: html };
+  // Product images are gallery assets only. Keep them out of the rich description so the same images are not rendered twice.
+  const descriptionHtml = html.replace(/<img\b[^>]*>/gi, '');
+  return { id: post.id, slug, title: post.title, description: meta(html,'description') || text(html).slice(0,220), price, compareAtPrice: compareAt || undefined, currency: meta(html,'currency') || 'INR', category, labels, image: imgs[0] || 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85', images: imgs.slice(0,6), sizes, colors, dodoProductId, url: post.url, published: post.published, contentHtml: descriptionHtml };
 }
 
 export const getProducts = cache(async (): Promise<Product[]> => {
