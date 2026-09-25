@@ -994,3 +994,5 @@ html,body{max-width:100%;overflow-x:hidden}
 .account-view-all svg{transition:transform .2s ease}
 .account-view-all:hover svg{transform:translateX(3px)}
 @media(max-width:560px){.account-view-all{font-size:8px;padding-top:6px}}
+
+/* deployment sync: phase 34 account cleanup + cart/wishlist fixes */
