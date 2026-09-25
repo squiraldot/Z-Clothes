@@ -36,6 +36,51 @@ export type Database = {
         Update: { user_id?: string; product_id?: string; created_at?: string };
         Relationships: [];
       };
+      cart_items: {
+        Row: {
+          user_id: string;
+          item_key: string;
+          product_id: string;
+          title: string;
+          price: number;
+          image: string;
+          quantity: number;
+          color: string | null;
+          size: string | null;
+          dodo_product_id: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          user_id: string;
+          item_key: string;
+          product_id: string;
+          title: string;
+          price: number;
+          image: string;
+          quantity: number;
+          color?: string | null;
+          size?: string | null;
+          dodo_product_id?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          user_id?: string;
+          item_key?: string;
+          product_id?: string;
+          title?: string;
+          price?: number;
+          image?: string;
+          quantity?: number;
+          color?: string | null;
+          size?: string | null;
+          dodo_product_id?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
