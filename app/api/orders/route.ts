@@ -3,7 +3,7 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { getProducts } from '@/lib/blogger';
 
 type BodyItem = { productId?: string; quantity?: number; color?: string; size?: string };
-type Body = { items?: BodyItem[]; addressId?: string };
+type Body = { items?: BodyItem[]; addressId?: string; couponCode?: string };
 
 export async function POST(request: Request) {
   const supabase = await createSupabaseServerClient();
@@ -16,6 +16,7 @@ export async function POST(request: Request) {
 
   const rawItems = Array.isArray(body.items) ? body.items.slice(0, 50) : [];
   const addressId = String(body.addressId || '');
+  const couponCode = String(body.couponCode || '').trim().slice(0, 40);
   if (!addressId) return NextResponse.json({ error: 'Please select a delivery address.' }, { status: 400 });
 
   const { data: address, error: addressError } = await supabase
@@ -69,6 +70,17 @@ export async function POST(request: Request) {
   if (itemError) {
     await supabase.from('orders').delete().eq('id', order.id);
     return NextResponse.json({ error: 'Unable to save your order items.' }, { status: 500 });
+  }
+
+  if (couponCode) {
+    const { data: coupon, error: couponError } = await supabase.rpc('redeem_coupon', {
+      p_code: couponCode, p_order_id: order.id, p_user_id: user.id, p_subtotal: subtotal,
+    });
+    if (couponError || !coupon?.[0]) {
+      await supabase.from('orders').delete().eq('id', order.id);
+      return NextResponse.json({ error: couponError?.message || 'Unable to apply this coupon.' }, { status: 400 });
+    }
+    return NextResponse.json({ order: { ...order, coupon_code: coupon[0].coupon_code, discount: coupon[0].discount_amount, total: Math.max(0, subtotal - Number(coupon[0].discount_amount)) } }, { status: 201 });
   }
 
   return NextResponse.json({ order }, { status: 201 });
