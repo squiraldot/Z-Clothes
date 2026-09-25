@@ -567,3 +567,32 @@ html,body{max-width:100%;overflow-x:hidden}
  .admin-order-meta{width:100%;justify-content:space-between}
  .admin-status select{min-width:155px}
 }
+
+
+/* Phase 27 — customer order lifecycle */
+.order-lifecycle{background:#fff;border:1px solid var(--line);padding:26px 30px;margin-top:14px}
+.order-lifecycle .panel-heading{padding-bottom:16px}
+.lifecycle-track{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:26px}
+.lifecycle-step{position:relative;min-width:0;padding-right:18px}
+.lifecycle-step:before{content:"";position:absolute;left:6px;right:0;top:6px;height:1px;background:var(--line)}
+.lifecycle-step:last-child:before{display:none}
+.lifecycle-dot{position:relative;z-index:1;display:block;width:13px;height:13px;border:1px solid var(--line);background:var(--paper);border-radius:50%;margin-bottom:14px}
+.lifecycle-step.active .lifecycle-dot{background:#111;border-color:#111}
+.lifecycle-step.current .lifecycle-dot{box-shadow:0 0 0 4px #eeeae4}
+.lifecycle-step>div{padding-right:10px}
+.lifecycle-step b{display:block;font-size:11px;font-weight:500;line-height:1.3}
+.lifecycle-step p{margin:6px 0 0;color:var(--muted);font-size:9px;line-height:1.5}
+.lifecycle-step.active:before{background:#111}
+.order-lifecycle-terminal{display:flex;align-items:center;min-height:130px}
+.order-lifecycle-terminal h2{font-family:Georgia,serif;font-size:30px;font-weight:400;margin:12px 0 5px}
+.order-lifecycle-terminal p{margin:0;color:var(--muted);font-size:11px}
+@media(max-width:700px){
+ .order-lifecycle{padding:22px}
+ .lifecycle-track{display:grid;grid-template-columns:1fr;gap:0;margin-top:22px}
+ .lifecycle-step{display:grid;grid-template-columns:26px 1fr;padding:0 0 22px}
+ .lifecycle-step:before{left:6px;right:auto;top:13px;bottom:0;width:1px;height:auto}
+ .lifecycle-step:last-child{padding-bottom:0}
+ .lifecycle-step:last-child:before{display:none}
+ .lifecycle-dot{margin:0}
+ .lifecycle-step>div{padding-left:5px}
+}
