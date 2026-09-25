@@ -996,3 +996,5 @@ html,body{max-width:100%;overflow-x:hidden}
 @media(max-width:560px){.account-view-all{font-size:8px;padding-top:6px}}
 
 /* deployment sync: phase 34 account cleanup + cart/wishlist fixes */
+
+/* deployment trigger: account parser fix */
