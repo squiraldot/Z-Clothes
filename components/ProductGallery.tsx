@@ -9,7 +9,6 @@ export function ProductGallery({ title, category, images }: { title:string; cate
   const [active, setActive] = useState(0);
   const [zoomed, setZoomed] = useState(false);
   const current = list[active] || list[0];
-  const [touchStart, setTouchStart] = useState<number | null>(null);
 
   useEffect(() => {
     if (!zoomed) return;
@@ -31,7 +30,7 @@ export function ProductGallery({ title, category, images }: { title:string; cate
 
   return (
     <div className="gallery">
-      <div className="gallery-main-wrap" onTouchStart={(event) => setTouchStart(event.touches[0]?.clientX ?? null)} onTouchEnd={(event) => { if (touchStart === null) return; const end = event.changedTouches[0]?.clientX ?? touchStart; const delta = end - touchStart; if (Math.abs(delta) > 45 && list.length > 1) { if (delta < 0) next(); else previous(); } setTouchStart(null); }}>
+      <div className="gallery-main-wrap">
         <button type="button" className="gallery-zoom-trigger" onClick={() => setZoomed(true)} aria-label="Open product image viewer">
           <Image className="main-product-image" src={current} alt={title} fill priority sizes="(max-width: 900px) 100vw, 55vw" quality={85} />
           <span className="gallery-label">Z-CLOTHES / {category}</span>
