@@ -1061,3 +1061,39 @@ html,body{max-width:100%;overflow-x:hidden}
  .product-icon-action{width:34px;height:34px}
  .gallery-label{left:12px;bottom:12px}
  }
+
+/* Phase 35 — product discovery and mobile shopping */
+.product-discovery-section{width:min(1400px,calc(100% - 48px));margin:0 auto;padding:65px 0 10px}
+.product-discovery-section .rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(230px,1fr);gap:16px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+.product-discovery-section .rail::-webkit-scrollbar{display:none}
+.new-drop-section{padding-top:45px}
+.size-guide-trigger{border:0;background:none;color:var(--muted);font:inherit;font-size:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:0}
+.availability{display:flex;align-items:center;gap:8px;margin:16px 0 2px;font-size:10px;text-transform:uppercase;letter-spacing:.1em}
+.availability-dot{width:7px;height:7px;border-radius:50%;background:#26734a;display:inline-block}
+.availability small{color:var(--muted);text-transform:none;letter-spacing:0}
+.size-guide-modal{position:fixed;inset:0;z-index:300;background:rgba(10,10,9,.58);display:grid;place-items:center;padding:20px}
+.size-guide-card{position:relative;width:min(560px,100%);max-height:90vh;overflow:auto;background:var(--paper);padding:38px}
+.size-guide-card h2{font-family:Georgia,serif;font-size:46px;font-weight:400;letter-spacing:-.04em;margin:8px 0}
+.size-guide-card p{color:var(--muted);font-size:12px;line-height:1.6}
+.size-guide-close{position:absolute;right:18px;top:18px;width:34px;height:34px;border:1px solid var(--line);background:#fff;border-radius:50%;font-size:22px;cursor:pointer}
+.size-guide-table{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line);margin:24px 0}
+.size-guide-table>div{padding:12px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);font-size:11px}
+.size-guide-table>div:nth-child(-n+3){font-weight:700;text-transform:uppercase;letter-spacing:.08em;background:#f1eee7}
+.size-guide-note{margin-bottom:0}
+.mobile-sticky-add{display:none}
+.gallery-main-wrap{touch-action:pan-y}
+@media(max-width:700px){
+ .product-discovery-section{width:calc(100% - 36px);padding:48px 0 6px}
+ .product-discovery-section .rail{grid-auto-columns:minmax(190px,72vw);gap:12px}
+ .mobile-sticky-add{position:fixed;display:flex;align-items:center;justify-content:space-between;gap:14px;left:0;right:0;bottom:0;z-index:80;background:rgba(251,250,247,.97);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom));box-shadow:0 -8px 25px rgba(0,0,0,.08);color:#111}
+ .mobile-sticky-add span{display:flex;flex-direction:column;min-width:0}
+ .mobile-sticky-add b{font-size:12px}
+ .mobile-sticky-add small{font-size:8px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:145px}
+ .mobile-sticky-add>strong{background:#111;color:#fff;padding:14px 20px;font-size:9px;text-transform:uppercase;letter-spacing:.12em;white-space:nowrap}
+ .product-page{padding-bottom:82px}
+}
+@media(max-width:560px){
+ .product-discovery-section{width:calc(100% - 24px);padding-top:40px}
+ .size-guide-card{padding:30px 20px}
+ .size-guide-card h2{font-size:38px}
+}
