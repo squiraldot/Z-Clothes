@@ -57,6 +57,9 @@ export default function LoginPage() {
             Password
             <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="current-password" required />
           </label>
+          <div className="auth-forgot">
+            <Link href="/auth/forgot-password">Forgot password?</Link>
+          </div>
 
           {message && <p className="auth-message" role="alert">{message}</p>}
 
