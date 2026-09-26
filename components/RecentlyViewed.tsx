@@ -15,7 +15,8 @@ export function rememberRecentlyViewed(id:string){
   } catch {}
 }
 
-export function RecentlyViewed({ products }: { products: Product[] }) {
+export function RecentlyViewed() {
+  const [products,setProducts]=useState<Product[]>([]);
   const [items,setItems]=useState<Product[]>([]);
   function refresh(){
     try {
@@ -24,7 +25,8 @@ export function RecentlyViewed({ products }: { products: Product[] }) {
       setItems(ids.map(id=>map.get(id)).filter(Boolean) as Product[]);
     } catch { setItems([]); }
   }
-  useEffect(()=>{refresh();window.addEventListener('zclothes:recently-viewed',refresh);return()=>window.removeEventListener('zclothes:recently-viewed',refresh)},[products]);
+  useEffect(()=>{ fetch('/api/products').then(r=>r.ok?r.json():[]).then(data=>setProducts(Array.isArray(data)?data:[])).catch(()=>{}); window.addEventListener('zclothes:recently-viewed',refresh); return()=>window.removeEventListener('zclothes:recently-viewed',refresh)},[]);
+  useEffect(()=>{refresh()},[products]);
   if(!items.length)return null;
   return <section className="product-discovery-section"><div className="section-head"><div><span className="eyebrow dark">YOUR HISTORY</span><h2>Recently Viewed</h2></div></div><div className="rail">{items.map(p=><ProductCard key={p.id} p={p}/>)}</div></section>;
 }
