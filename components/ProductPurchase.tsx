@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { Product } from '@/lib/types';
 import { BuyButton } from '@/components/BuyButton';
-import { Heart, ShareNetwork, Minus, Plus, Check, Ruler } from '@phosphor-icons/react';
+import { Heart, ShareNetwork, Minus, Plus, Check } from '@phosphor-icons/react';
 import { createSupabaseBrowserClient } from '@/lib/supabase/browser';
 import { addToCart, readWishlist, toggleWishlist } from '@/lib/shop';
 import { toggleRemoteWishlist } from '@/lib/wishlist';
@@ -21,8 +21,7 @@ export function ProductPurchase({ product }: { product: Product }) {
   const [shared, setShared] = useState(false);
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
 
-  const maxQuantity = product.stock === undefined ? 20 : Math.max(1, Math.min(20, product.stock));
-  const soldOut = product.stock === 0;
+  const maxQuantity = 20;
 
   useEffect(() => { setLiked(readWishlist().includes(product.id)); }, [product.id]);
   useEffect(() => {
@@ -58,7 +57,6 @@ export function ProductPurchase({ product }: { product: Product }) {
   }
 
   function stickyAdd() {
-    if (soldOut) return;
     addToCart(product, { color, size, quantity });
   }
 
@@ -70,22 +68,19 @@ export function ProductPurchase({ product }: { product: Product }) {
       </div>}
 
       {!!product.sizes?.length && <div className="option">
-        <label>Size <button type="button" className="size-guide-trigger" onClick={()=>setSizeGuideOpen(true)}><Ruler size={13}/> Size guide</button></label>
+        <label>Size <button type="button" className="size-guide-trigger" onClick={()=>setSizeGuideOpen(true)}>Size guide</button></label>
         <div className="size-row">{product.sizes.map((s) => <button type="button" key={s} aria-label={'Select size ' + s} onClick={() => setSize(s)} className={size===s ? 'selected' : ''}>{s}</button>)}</div>
         <small className="selection-note">{color}{color && size ? ' · ' : ''}{size}</small>
       </div>}
 
-      {product.stock !== undefined && <div className={soldOut ? 'availability sold-out' : product.stock <= 5 ? 'availability low-stock' : 'availability'}>
-        <span className="availability-dot" aria-hidden="true"/><strong>{soldOut ? 'Sold out' : product.stock <= 5 ? 'Only ' + product.stock + ' left' : 'In stock'}</strong>
-        {!soldOut && <small>Ready to add to bag</small>}
-      </div>}
+      <div className="availability"><span className="availability-dot" aria-hidden="true"/><strong>Available to order</strong><small>{color}{color && size ? ' · ' : ''}{size}</small></div>
 
       <div className="quantity-option">
         <label>Quantity <strong>{quantity}</strong></label>
         <div className="quantity-control">
           <button type="button" onClick={() => changeQuantity(-1)} aria-label="Decrease quantity" disabled={quantity <= 1}><Minus size={15}/></button>
           <span>{quantity}</span>
-          <button type="button" onClick={() => changeQuantity(1)} aria-label="Increase quantity" disabled={quantity >= maxQuantity || soldOut}><Plus size={15}/></button>
+          <button type="button" onClick={() => changeQuantity(1)} aria-label="Increase quantity" disabled={quantity >= maxQuantity}><Plus size={15}/></button>
         </div>
       </div>
 
@@ -97,7 +92,7 @@ export function ProductPurchase({ product }: { product: Product }) {
         </div>
       </div>
 
-      {!soldOut && <button type="button" className="mobile-sticky-add" onClick={stickyAdd}><span><b>₹{product.price.toLocaleString('en-IN')}</b><small>{color}{color&&size?' · ':''}{size}</small></span><strong>Add to Bag</strong></button>}
+      <button type="button" className="mobile-sticky-add" onClick={stickyAdd}><span><b>₹{product.price.toLocaleString('en-IN')}</b><small>{color}{color&&size?' · ':''}{size}</small></span><strong>Add to Bag</strong></button>
 
       {sizeGuideOpen && <div className="size-guide-modal" role="dialog" aria-modal="true" aria-labelledby="size-guide-title" onClick={()=>setSizeGuideOpen(false)}>
         <div className="size-guide-card" onClick={event=>event.stopPropagation()}>
