@@ -67,7 +67,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       '@type': 'Offer',
       priceCurrency: p.currency || 'INR',
       price: p.price,
-      availability: 'https://schema.org/InStock',
+      availability: p.stock === 0 ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
       url: `${SITE}/products/${p.slug}`,
     },
   };
