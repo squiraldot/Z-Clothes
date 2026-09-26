@@ -9,17 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@phosphor-icons/react": "latest",
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest",
-    "@supabase/ssr": "latest",
-    "@supabase/supabase-js": "latest"
+    "@phosphor-icons/react": "2.1.10",
+    "next": "16.3.6",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "@supabase/ssr": "0.12.7",
+    "@supabase/supabase-js": "2.117.1"
   },
   "devDependencies": {
-    "@types/node": "latest",
-    "@types/react": "latest",
-    "@types/react-dom": "latest",
-    "typescript": "latest"
+    "@types/node": "22.20.4",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "typescript": "5.9.3"
   }
 }
