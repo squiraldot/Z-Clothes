@@ -40,3 +40,6 @@ npm run dev
 ```
 
 The app intentionally falls back to a polished demo catalog until Blogger credentials are configured, which makes the UI previewable before production data is connected.
+
+
+<!-- build stability: dependencies pinned -->
