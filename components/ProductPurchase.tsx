@@ -8,6 +8,8 @@ import { Heart, ShareNetwork, Minus, Plus, Check } from '@phosphor-icons/react';
 import { createSupabaseBrowserClient } from '@/lib/supabase/browser';
 import { readWishlist, toggleWishlist } from '@/lib/shop';
 import { toggleRemoteWishlist } from '@/lib/wishlist';
+import { addToCart } from '@/lib/shop';
+import { SizeGuideModal } from '@/components/SizeGuideModal';
 
 export function ProductPurchase({ product }: { product: Product }) {
   const [color, setColor] = useState(product.colors?.[0] || '');
@@ -15,6 +17,7 @@ export function ProductPurchase({ product }: { product: Product }) {
   const [quantity, setQuantity] = useState(1);
   const [liked, setLiked] = useState(false);
   const [shared, setShared] = useState(false);
+  const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
 
   useEffect(() => {
     setLiked(readWishlist().includes(product.id));
@@ -64,7 +67,7 @@ export function ProductPurchase({ product }: { product: Product }) {
       </div>}
 
       {!!product.sizes?.length && <div className="option">
-        <label>Size <Link href="/policies#size-guide">Size guide</Link></label>
+        <label>Size <button type="button" className="size-guide-trigger" onClick={() => setSizeGuideOpen(true)}>Size guide</button></label>
         <div className="size-row">
           {product.sizes.map((s) => (
             <button type="button" key={s} aria-label={`Select size ${s}`} onClick={() => setSize(s)} className={size===s ? 'selected' : ''}>{s}</button>
@@ -72,6 +75,8 @@ export function ProductPurchase({ product }: { product: Product }) {
         </div>
         <small className="selection-note">{color}{color && size ? ' · ' : ''}{size}</small>
       </div>}
+
+      <div className="availability"><span className="availability-dot" aria-hidden="true"/><strong>Available to order</strong><small>{color}{color && size ? ' · ' : ''}{size}</small></div>
 
       <div className="quantity-option">
         <label>Quantity <strong>{quantity}</strong></label>
@@ -89,6 +94,9 @@ export function ProductPurchase({ product }: { product: Product }) {
           <button type="button" className="product-icon-action" onClick={shareProduct} aria-label="Share product">{shared ? <Check size={19}/> : <ShareNetwork size={19}/>}</button>
         </div>
       </div>
+
+      <button type="button" className="mobile-sticky-add" onClick={() => addToCart(product, { color, size, quantity })}><span><b>₹{product.price.toLocaleString('en-IN')}</b><small>{color}{color && size ? ' · ' : ''}{size}</small></span><strong>Add to Bag</strong></button>
+      <SizeGuideModal open={sizeGuideOpen} onClose={() => setSizeGuideOpen(false)} />
     </>
   );
 }
