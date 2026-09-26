@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import type { Product } from '@/lib/types';
 import { BuyButton } from '@/components/BuyButton';
 import { Heart, ShareNetwork, Minus, Plus, Check } from '@phosphor-icons/react';
