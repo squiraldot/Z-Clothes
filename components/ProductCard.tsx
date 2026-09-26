@@ -22,7 +22,6 @@ export function ProductCard({ p }: { p: Product }) {
 
   function quickAdd(event: MouseEvent<HTMLButtonElement>) {
     event.stopPropagation();
-    if (p.stock === 0) return;
     addToCart(p);
     setAdded(true);
     window.setTimeout(() => setAdded(false), 1400);
@@ -51,12 +50,12 @@ export function ProductCard({ p }: { p: Product }) {
           <div className="product-image">
             <Image src={p.image} alt={p.title} fill sizes="(max-width: 560px) 48vw, (max-width: 900px) 48vw, 25vw" />
             {p.images?.[1] && <Image className="product-hover-image" src={p.images[1]} alt="" fill sizes="(max-width: 560px) 48vw, (max-width: 900px) 48vw, 25vw" aria-hidden="true" />}
-            {p.stock === 0 ? <span className="tag sold-out-tag">Sold out</span> : p.labels[0] && <span className="tag">{p.labels[0]}</span>}
+            {p.labels[0] && <span className="tag">{p.labels[0]}</span>}
           </div>
         </Link>
         <div className="product-card-actions" aria-label="Product actions">
           <button className={liked ? 'wish liked' : 'wish'} onClick={toggleLike} aria-label={liked ? 'Remove from wishlist' : 'Add to wishlist'}><Heart size={20} weight={liked ? 'fill' : 'regular'} /></button>
-          <button disabled={p.stock === 0} className={added ? 'quick-add added' : 'quick-add'} onClick={quickAdd} aria-label={`Quick add ${p.title}`}><Plus size={16}/><span>{p.stock === 0 ? 'Sold out' : added ? 'Added to bag' : 'Quick add'}</span></button>
+          <button className={added ? 'quick-add added' : 'quick-add'} onClick={quickAdd} aria-label={`Quick add ${p.title}`}><Plus size={16}/><span>{added ? 'Added to bag' : 'Quick add'}</span></button>
         </div>
       </div>
       <Link href={`/products/${p.slug}`} className="product-meta">
