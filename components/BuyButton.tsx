@@ -12,10 +12,7 @@ export function BuyButton({ product, color, size, quantity = 1 }: Props) {
   const [showCongratulations, setShowCongratulations] = useState(false);
   const [added, setAdded] = useState(false);
 
-  const soldOut = product.stock === 0;
-
   function add() {
-    if (soldOut) return;
     addToCart(product, { color, size, quantity });
     setAdded(true);
     window.setTimeout(() => setAdded(false), 1400);
@@ -39,10 +36,10 @@ export function BuyButton({ product, color, size, quantity = 1 }: Props) {
   return (
     <>
       <div className="buy-stack">
-        <button type="button" className={added ? 'add-cart added' : 'add-cart'} onClick={add} disabled={soldOut}>
-          {soldOut ? 'Sold Out' : added ? 'Added to Bag ✓' : 'Add to Bag'}
+        <button type="button" className={added ? 'add-cart added' : 'add-cart'} onClick={add}>
+          {added ? 'Added to Bag ✓' : 'Add to Bag'}
         </button>
-        <button type="button" className="dodo-btn" onClick={buy} disabled={soldOut}>
+        <button type="button" className="dodo-btn" onClick={buy}>
           <LockKey size={18} /> Buy Now
         </button>
       </div>
@@ -56,7 +53,7 @@ export function BuyButton({ product, color, size, quantity = 1 }: Props) {
             <CheckCircle size={58} weight="fill" />
             <span className="eyebrow dark">Z-CLOTHES</span>
             <h2 id="buy-now-title">Added to your bag 🎉</h2>
-            <p>{soldOut ? 'This product is currently unavailable.' : 'Your selection has been saved.'} Secure payments will be available after verification.</p>
+            <p>Your selection has been saved. Secure payments will be available after verification.</p>
             <div className="modal-actions">
               <button type="button" className="btn outline" onClick={() => setShowCongratulations(false)}>Continue shopping</button>
               <Link href="/checkout" className="btn dark" onClick={() => setShowCongratulations(false)}>View bag →</Link>
