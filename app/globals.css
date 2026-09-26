@@ -1097,3 +1097,8 @@ html,body{max-width:100%;overflow-x:hidden}
  .size-guide-card{padding:30px 20px}
  .size-guide-card h2{font-size:38px}
 }
+
+
+.auth-forgot{display:flex;justify-content:flex-end;margin-top:-8px}
+.auth-forgot a{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#111;text-decoration:underline;text-underline-offset:4px}
+.auth-forgot a:hover{opacity:.65}
