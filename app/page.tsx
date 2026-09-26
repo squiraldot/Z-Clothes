@@ -5,7 +5,6 @@ import { getProducts } from '@/lib/blogger';
 import { HorizontalRail } from '@/components/HorizontalRail';
 import { ImmersiveHero } from '@/components/ImmersiveHero';
 import type { Product } from '@/lib/types';
-import { NewDropSection } from '@/components/NewDropSection';
 
 const categoryNames = ['T-Shirts','Hoodies','Jackets','Cargo Pants','Shirts'];
 const seasonImage='https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=2200&q=90';
@@ -18,11 +17,10 @@ export default async function Home() {
   } catch {
     // Keep the storefront shell available if Blogger is temporarily unavailable.
   }
-  const newDrop = products.filter((p) => (p.labels || []).some((label) => /^(new|new drop|just in)$/i.test(label)) || (p.published ? Date.now() - new Date(p.published).getTime() <= 1000 * 60 * 60 * 24 * 14 : false)).slice(0,8);
   const categoryCards=categoryNames.map((name)=>({name,product:products.find((p)=>p.category.toLowerCase()===name.toLowerCase())??products.find((p)=>p.title.toLowerCase().includes(name.toLowerCase().replace(' ','')))}));
   return <main>
     <ImmersiveHero/>
-    {newDrop.length > 0 && <NewDropSection products={newDrop}/>}\n    <section className="section featured">
+    <section className="section featured">
       <div className="section-head"><div><span className="eyebrow dark">CURATED FOR YOU</span><h2>Featured Collections</h2></div><span className="scroll-hint">Scroll horizontally →</span></div>
       <div className="category-rail">{categoryCards.map(({name,product})=><Link href={`/products?category=${encodeURIComponent(name)}`} className="category-card" key={name}><Image src={product?.image??products[0]?.image??'/icon.svg'} alt="" fill sizes="(max-width: 560px) 78vw, 260px"/><div><b>{name}</b><span>Explore →</span></div></Link>)}</div>
     </section>
