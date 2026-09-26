@@ -19,7 +19,6 @@ export function BuyButton({ product, color, size, quantity = 1 }: Props) {
   }
 
   function buy() {
-    if (soldOut) return;
     addToCart(product, { color, size, quantity });
     setShowCongratulations(true);
   }
