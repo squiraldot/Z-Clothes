@@ -18,8 +18,8 @@ export default function ForgotPasswordPage() {
 
     try {
       const supabase = createSupabaseBrowserClient();
-      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
-      const redirectTo = `${siteUrl.replace(/\/$/, '')}/auth/callback?next=/auth/reset-password`;
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://z-clothes.onrender.com';
+      const redirectTo = `${siteUrl.replace(/\/$/, '')}/auth/reset-password`;
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
 
       if (resetError) {
