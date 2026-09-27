@@ -132,8 +132,6 @@ export default function ResetPasswordPage() {
           </button>
         </form>}
 
-        {error && <p className="auth-message" role="alert">{error}</p>}
-
         <p className="auth-switch">
           Need to start again? <Link href="/auth/forgot-password">Send another reset link</Link>
         </p>
