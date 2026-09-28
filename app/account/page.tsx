@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { AccountActions } from '@/components/AccountActions';
 import { ProfileForm } from '@/components/ProfileForm';
+import { ChangePasswordForm } from '@/components/ChangePasswordForm';
 
 export const metadata = {
   title: 'My Account — Z-Clothes',
@@ -109,6 +110,9 @@ export default async function AccountPage() {
               initialPhone={profile?.phone ?? ''}
               initialAvatarUrl={profile?.avatar_url ?? ''}
             />
+            <div className="account-security-block">
+              <ChangePasswordForm />
+            </div>
           </section>
 
           <section className="account-panel account-recent-orders">
