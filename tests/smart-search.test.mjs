@@ -20,7 +20,7 @@ test('smart search ranks exact title and attribute matches above loose matches',
 });
 
 test('autocomplete suggests a close product when the query has a small typo', () => {
-  assert.equal(getSearchSuggestions(products, 'hoodi').at(0)?.value, 'Oversized Black Hoodie');
+  assert.equal(getSearchSuggestions(products, 'hooodie').at(0)?.value, 'Oversized Black Hoodie');
 });
 
 test('autocomplete suggestions combine products, categories and labels without duplicates', () => {
