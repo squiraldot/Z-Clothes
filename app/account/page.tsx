@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, Bell, Heart, MapPin, Package, UserCircle } from '@phosphor-icons/react/dist/ssr';
+import { ArrowRight, Bell, Heart, MapPin, Package, SlidersHorizontal, UserCircle } from '@phosphor-icons/react/dist/ssr';
 import { redirect } from 'next/navigation';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { AccountActions } from '@/components/AccountActions';
@@ -150,6 +150,24 @@ export default async function AccountPage() {
             )}
           </section>
         </div>
+
+        <section className="account-panel" style={{ marginTop: 14 }}>
+          <div className="account-panel-top">
+            <div>
+              <span className="eyebrow dark">PREFERENCES</span>
+              <h2>Stay in control.</h2>
+            </div>
+            <Link className="account-view-all" href="/account/preferences">
+              <span>Manage preferences</span>
+              <ArrowRight size={15} />
+            </Link>
+          </div>
+          <Link href="/account/preferences" className="account-stat" style={{ marginTop: 8 }}>
+            <SlidersHorizontal size={19} />
+            <div><span>Email & shopping preferences</span><strong>Manage</strong></div>
+            <ArrowRight size={15} />
+          </Link>
+        </section>
       </div>
     </main>
   );
