@@ -10,6 +10,7 @@ import {
   cartRevisionChanged,
   canCommitCartSync,
 } from '../lib/cart-experience.ts';
+import { getOrderStatusMeta, getOrderLifecycle, canReorderOrder } from '../lib/order-experience.ts';
 
 const item = (productId, quantity, price = 100) => ({
   productId,
@@ -69,4 +70,17 @@ test('cart revision guard detects a local mutation during remote sync', () => {
 test('cart sync cannot commit a merge after a local mutation during the remote write', () => {
   assert.equal(canCommitCartSync(7, 8), false);
   assert.equal(canCommitCartSync(7, 7), true);
+});
+
+
+test('order experience maps active statuses to clear lifecycle metadata', () => {
+  assert.equal(getOrderStatusMeta('shipped').label, 'On the way');
+  assert.equal(getOrderStatusMeta('shipped').tone, 'active');
+  assert.equal(getOrderLifecycle('delivered').at(-1)?.key, 'delivered');
+});
+
+test('order experience exposes reorder only for completed orders with items', () => {
+  assert.equal(canReorderOrder('delivered', 2), true);
+  assert.equal(canReorderOrder('processing', 2), false);
+  assert.equal(canReorderOrder('delivered', 0), false);
 });
