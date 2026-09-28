@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { MagnifyingGlass, UserCircle, ShoppingBag, Heart, List, X, ArrowRight } from '@phosphor-icons/react';
 import { useEffect, useState, type FormEvent } from 'react';
-import type { SearchSuggestion } from '@/lib/smart-search';
 import { useRouter } from 'next/navigation';
 import type { User } from '@supabase/supabase-js';
 import { CartDrawer } from '@/components/CartDrawer';
@@ -23,7 +22,6 @@ export function Header() {
   const [count, setCount] = useState(0);
   const [wishlistCount, setWishlistCount] = useState(0);
   const [query, setQuery] = useState('');
-  const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([]);
 
   function syncCount() {
     setCount(readCart().reduce((sum, item) => sum + Number(item.quantity || 0), 0));
@@ -91,18 +89,6 @@ export function Header() {
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [searchOpen, accountOpen, open]);
-
-  useEffect(() => {
-    if (!searchOpen || query.trim().length < 2) { setSuggestions([]); return; }
-    const controller = new AbortController();
-    const timer = window.setTimeout(() => {
-      fetch('/api/search?q=' + encodeURIComponent(query), { signal: controller.signal, cache: 'no-store' })
-        .then((response) => response.ok ? response.json() : [])
-        .then((data) => setSuggestions(Array.isArray(data) ? data : []))
-        .catch(() => undefined);
-    }, 120);
-    return () => { window.clearTimeout(timer); controller.abort(); };
-  }, [query, searchOpen]);
 
   function submitSearch(event: FormEvent) {
     event.preventDefault();
