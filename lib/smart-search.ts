@@ -45,13 +45,40 @@ function scoreProduct(product: Product, tokens: string[], query: string) {
   return score;
 }
 
+function parseSearchQualifiers(query: string) {
+  let textQuery = query;
+  let size: string | undefined;
+  let maxPrice: number | undefined;
+
+  const sizeMatch = textQuery.match(/\bsize\s+(xxxl|xxl|xl|xs|xxs|small|medium|large|s|m|l)\b|\b(xxxl|xxl|xl|xs|xxs|small|medium|large|s|m|l)\s+size\b/i);
+  if (sizeMatch) {
+    const raw = (sizeMatch[1] || sizeMatch[2]).toLowerCase();
+    size = ({ small: 'S', medium: 'M', large: 'L' } as Record<string, string>)[raw] || raw.toUpperCase();
+    textQuery = textQuery.replace(sizeMatch[0], ' ');
+  }
+
+  const priceMatch = textQuery.match(/\b(?:under|below|less\s+than|up\s+to|upto)\s*(?:₹|rs\.?|inr)?\s*([\d,]+)\b/i);
+  if (priceMatch) {
+    maxPrice = Number(priceMatch[1].replace(/,/g, ''));
+    textQuery = textQuery.replace(priceMatch[0], ' ');
+  }
+
+  return { textQuery: normalizeSearchQuery(textQuery), size, maxPrice };
+}
+
 export function searchProducts(products: Product[], query: string) {
   const normalized = normalizeSearchQuery(query);
-  const tokens = getSearchTokens(normalized);
-  if (!tokens.length) return [...products];
+  const { textQuery, size, maxPrice } = parseSearchQualifiers(normalized);
+  const tokens = getSearchTokens(textQuery);
+
   return products
-    .map((product) => ({ product, score: scoreProduct(product, tokens, normalized) }))
-    .filter((entry) => entry.score >= 0)
+    .map((product) => ({
+      product,
+      score: scoreProduct(product, tokens, textQuery),
+      sizeMatch: !size || (product.sizes || []).some((value) => value.toLowerCase() === size.toLowerCase()),
+      priceMatch: maxPrice === undefined || product.price <= maxPrice,
+    }))
+    .filter((entry) => entry.score >= 0 && entry.sizeMatch && entry.priceMatch)
     .sort((a, b) => b.score - a.score || a.product.title.localeCompare(b.product.title))
     .map((entry) => entry.product);
 }
@@ -70,12 +97,16 @@ export function getSearchSuggestions(products: Product[], query: string, limit =
   const direct = searchProducts(products, normalized);
   for (const product of direct.slice(0, 4)) add('product', product.title);
   if (!direct.length) {
-    const candidates = products.flatMap((product) => [product.title, product.category, ...(product.labels || [])]);
-    const fuzzy = [...new Set(candidates)].filter((value) => {
-      const candidate = normalizeSearchQuery(value);
-      return getSearchTokens(normalized).some((token) => candidate.split(' ').some((word) => word.length >= 4 && editDistance(token, word) <= 2));
+    const candidates = products.flatMap((product) => [
+      { type: 'product' as const, value: product.title },
+      { type: 'category' as const, value: product.category },
+      ...(product.labels || []).map((value) => ({ type: 'label' as const, value })),
+    ]);
+    const fuzzy = [...new Map(candidates.map((candidate) => [candidate.value.toLowerCase(), candidate])).values()].filter((candidate) => {
+      const words = normalizeSearchQuery(candidate.value).split(' ');
+      return getSearchTokens(normalized).some((token) => words.some((word) => word.length >= 4 && editDistance(token, word) <= 2));
     });
-    for (const value of fuzzy.slice(0, 4)) add('product', value);
+    for (const candidate of fuzzy.slice(0, 4)) add(candidate.type, candidate.value);
   }
   for (const category of [...new Set(products.map((p) => p.category).filter(Boolean))]) {
     if (category.toLowerCase().includes(normalized)) add('category', category);
