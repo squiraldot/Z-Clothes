@@ -3,6 +3,7 @@ import { ArrowLeft, SlidersHorizontal } from '@phosphor-icons/react/dist/ssr';
 import { redirect } from 'next/navigation';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { AccountPreferencesForm } from '@/components/AccountPreferencesForm';
+import styles from '@/components/AccountPreferencesForm.module.css';
 
 export const metadata = {
   title: 'Preferences — Z-Clothes',
@@ -25,10 +26,10 @@ export default async function AccountPreferencesPage() {
     <main className="account-page">
       <div className="account-shell">
         <Link href="/account" className="back-link"><ArrowLeft size={14} /> Account</Link>
-        <div className="account-preferences-heading">
+        <div className={styles.heading}>
           <span className="eyebrow dark">ACCOUNT PREFERENCES</span>
-          <div className="account-preferences-title">
-            <div className="account-preferences-icon"><SlidersHorizontal size={23} /></div>
+          <div className={styles.title}>
+            <div className={styles.icon}><SlidersHorizontal size={23} /></div>
             <div>
               <h1>Choose what reaches you.</h1>
               <p>Control promotional email cadence, topics and future product recommendations from one place.</p>
