@@ -13,6 +13,7 @@ export type CartItem = {
 };
 
 export const CART_KEY = 'zclothes-cart';
+export const CART_REVISION_KEY = 'zclothes-cart-revision';
 export const WISHLIST_KEY = 'zclothes-wishlist';
 
 export function readCart(): CartItem[] {
@@ -25,8 +26,15 @@ export function readCart(): CartItem[] {
   }
 }
 
+export function readCartRevision() {
+  if (typeof window === 'undefined') return 0;
+  const value = Number(localStorage.getItem(CART_REVISION_KEY) || '0');
+  return Number.isFinite(value) ? value : 0;
+}
+
 export function writeCart(items: CartItem[]) {
   localStorage.setItem(CART_KEY, JSON.stringify(items));
+  localStorage.setItem(CART_REVISION_KEY, String(readCartRevision() + 1));
   window.dispatchEvent(new CustomEvent('zclothes:cart-updated'));
 }
 
