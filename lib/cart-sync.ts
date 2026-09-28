@@ -1,5 +1,6 @@
 import type { CartItem } from '@/lib/shop';
 import { cartItemKey, readCart, readCartRevision, setCart } from '@/lib/shop';
+import { canCommitCartSync } from '@/lib/cart-experience';
 import { createSupabaseBrowserClient } from '@/lib/supabase/browser';
 
 let cartQueue: Promise<unknown> = Promise.resolve();
@@ -49,7 +50,7 @@ export async function syncCart() {
     const { data: remoteRows, error: readError } = await supabase.from('cart_items').select('*').eq('user_id', user.id);
     if (readError) throw readError;
 
-    if (readCartRevision() !== syncRevision) return readCart();
+    if (!canCommitCartSync(syncRevision, readCartRevision())) return readCart();
 
     const local = readCart();
     const localKeys = new Set(local.map(cartItemKey));
@@ -60,6 +61,9 @@ export async function syncCart() {
       const { error } = await supabase.from('cart_items').upsert(merged.map((item) => toRow(user.id, item)), { onConflict: 'user_id,item_key' });
       if (error) throw error;
     }
+
+    // The remote write above can yield. A local remove/clear during that wait must win.
+    if (!canCommitCartSync(syncRevision, readCartRevision())) return readCart();
 
     setCart(merged);
     return merged;

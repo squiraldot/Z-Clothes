@@ -10,6 +10,10 @@ export function cartRevisionChanged(startRevision: number, currentRevision: numb
   return startRevision !== currentRevision;
 }
 
+export function canCommitCartSync(startRevision: number, currentRevision: number) {
+  return !cartRevisionChanged(startRevision, currentRevision);
+}
+
 export function changeCartQuantity(quantity: number, delta: number) {
   return Math.min(MAX_CART_QUANTITY, Math.max(1, Math.floor(quantity) + Math.trunc(delta)));
 }
