@@ -52,3 +52,10 @@ export function getOrderLifecycleIndex(status: string) {
 export function canReorderOrder(status: string, itemCount: number) {
   return status === 'delivered' && itemCount > 0;
 }
+
+export function matchesOrderFilter(status: string, filter: 'all' | 'active' | 'delivered' | 'cancelled') {
+  if (filter === 'all') return true;
+  if (filter === 'active') return ['pending_payment', 'paid', 'processing', 'shipped'].includes(status);
+  if (filter === 'delivered') return status === 'delivered';
+  return ['cancelled', 'refunded'].includes(status);
+}
