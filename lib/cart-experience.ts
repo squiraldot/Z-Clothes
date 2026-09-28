@@ -6,6 +6,10 @@ function cartItemKey(item: Pick<CartItem, 'productId' | 'color' | 'size'>) {
 
 export const MAX_CART_QUANTITY = 20;
 
+export function cartRevisionChanged(startRevision: number, currentRevision: number) {
+  return startRevision !== currentRevision;
+}
+
 export function changeCartQuantity(quantity: number, delta: number) {
   return Math.min(MAX_CART_QUANTITY, Math.max(1, Math.floor(quantity) + Math.trunc(delta)));
 }
