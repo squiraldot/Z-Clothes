@@ -44,7 +44,7 @@ test('smart search interprets structured size and price qualifiers', () => {
 });
 
 test('fuzzy autocomplete preserves category and label suggestion types', () => {
-  assert.deepEqual(getSearchSuggestions(products, 'hoodies'), [
+  assert.deepEqual(getSearchSuggestions(products, 'hooodies'), [
     { type:'product', value:'Oversized Black Hoodie' },
     { type:'category', value:'Hoodies' }
   ]);
