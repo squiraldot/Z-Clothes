@@ -30,7 +30,9 @@ test('autocomplete suggestions combine products, categories and labels without d
   ]);
 });
 
-test('products page search must keep ordinary text queries intact', () => {
+test('products page search keeps ordinary queries intact and filters the grid', () => {
+  assert.equal(normalizeSearchQuery('hoodie'), 'hoodie');
+  assert.deepEqual(searchProducts(products, 'hoodie').map(p => p.id), ['1']);
   assert.equal(normalizeSearchQuery('T-Shirts'), 't shirts');
   assert.deepEqual(searchProducts(products, 'T-Shirts').map(p => p.id), ['3']);
 });

@@ -3,7 +3,7 @@ import type { Product } from '@/lib/types';
 export type SearchSuggestion = { type: 'product' | 'category' | 'label'; value: string };
 
 export function normalizeSearchQuery(query: string) {
-  return query.replace(/[^\\p{L}\\p{N}\\s-]/gu, ' ').replace(/[-]+/g, ' ').replace(/\\s+/g, ' ').trim().toLowerCase();
+  return query.replace(/[^\p{L}\p{N}\s-]/gu, ' ').replace(/[-]+/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
 }
 
 export function getSearchTokens(query: string) {
