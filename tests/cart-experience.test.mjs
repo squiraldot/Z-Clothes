@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   MAX_CART_QUANTITY,
+  cartItemCount,
   cartSubtotal,
   changeCartQuantity,
   removeCartItem,
@@ -26,6 +27,10 @@ test('cart quantity increments without exceeding the maximum', () => {
 test('cart quantity decrements without dropping below one', () => {
   assert.equal(changeCartQuantity(2, -1), 1);
   assert.equal(changeCartQuantity(1, -1), 1);
+});
+
+test('cart item count sums quantities across variants', () => {
+  assert.equal(cartItemCount([item('a', 2), item('b', 3)]), 5);
 });
 
 test('cart subtotal sums each line using its current quantity', () => {
