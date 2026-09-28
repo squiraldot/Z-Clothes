@@ -8,6 +8,7 @@ import {
   removeCartItem,
   restoreCartItem,
   cartRevisionChanged,
+  canCommitCartSync,
 } from '../lib/cart-experience.ts';
 
 const item = (productId, quantity, price = 100) => ({
@@ -63,4 +64,9 @@ test('restoring an item with an invalid index appends it safely', () => {
 test('cart revision guard detects a local mutation during remote sync', () => {
   assert.equal(cartRevisionChanged(4, 5), true);
   assert.equal(cartRevisionChanged(4, 4), false);
+});
+
+test('cart sync cannot commit a merge after a local mutation during the remote write', () => {
+  assert.equal(canCommitCartSync(7, 8), false);
+  assert.equal(canCommitCartSync(7, 7), true);
 });
