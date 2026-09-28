@@ -10,7 +10,7 @@ import {
   cartRevisionChanged,
   canCommitCartSync,
 } from '../lib/cart-experience.ts';
-import { getOrderStatusMeta, getOrderLifecycle, canReorderOrder } from '../lib/order-experience.ts';
+import { getOrderStatusMeta, getOrderLifecycle, canReorderOrder, matchesOrderFilter } from '../lib/order-experience.ts';
 
 const item = (productId, quantity, price = 100) => ({
   productId,
@@ -83,4 +83,11 @@ test('order experience exposes reorder only for completed orders with items', ()
   assert.equal(canReorderOrder('delivered', 2), true);
   assert.equal(canReorderOrder('processing', 2), false);
   assert.equal(canReorderOrder('delivered', 0), false);
+});
+
+test('order filters keep active delivery states together', () => {
+  assert.equal(matchesOrderFilter('processing', 'active'), true);
+  assert.equal(matchesOrderFilter('shipped', 'active'), true);
+  assert.equal(matchesOrderFilter('delivered', 'active'), false);
+  assert.equal(matchesOrderFilter('cancelled', 'cancelled'), true);
 });
