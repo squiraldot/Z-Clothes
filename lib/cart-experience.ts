@@ -1,11 +1,4 @@
-type CartItem = {
-  productId: string;
-  price: number;
-  quantity: number;
-  color?: string;
-  size?: string;
-  [key: string]: unknown;
-};
+import type { CartItem } from './shop';
 
 function cartItemKey(item: Pick<CartItem, 'productId' | 'color' | 'size'>) {
   return [item.productId, item.color || '', item.size || ''].join('::');
