@@ -29,7 +29,7 @@ export function AccountPreferencesForm({ userId, initialPreferences }: Props) {
   const [message, setMessage] = useState('');
   const dirty = JSON.stringify(preferences) !== JSON.stringify(savedPreferences);
 
-  function toggle(key: keyof AccountPreferences) {
+  function toggle(key: keyof Pick<AccountPreferences, 'newArrivals' | 'offers' | 'styleEdits' | 'personalizedRecommendations'>) {
     setPreferences((current) => ({ ...current, [key]: !current[key] }));
     setMessage('');
   }
