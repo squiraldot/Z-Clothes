@@ -36,3 +36,16 @@ test('products page search keeps ordinary queries intact and filters the grid', 
   assert.equal(normalizeSearchQuery('T-Shirts'), 't shirts');
   assert.deepEqual(searchProducts(products, 'T-Shirts').map(p => p.id), ['3']);
 });
+
+test('smart search interprets structured size and price qualifiers', () => {
+  assert.deepEqual(searchProducts(products, 'hoodie size M').map(p => p.id), ['1']);
+  assert.deepEqual(searchProducts(products, 'hoodie under ₹2000').map(p => p.id), []);
+  assert.deepEqual(searchProducts(products, 'cotton under 1500').map(p => p.id), ['3']);
+});
+
+test('fuzzy autocomplete preserves category and label suggestion types', () => {
+  assert.deepEqual(getSearchSuggestions(products, 'hoodies'), [
+    { type:'product', value:'Oversized Black Hoodie' },
+    { type:'category', value:'Hoodies' }
+  ]);
+});
