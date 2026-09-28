@@ -1216,3 +1216,23 @@ html,body{max-width:100%;overflow-x:hidden}
 @media(prefers-reduced-motion:reduce){
   .cart-drawer,.cart-backdrop{transition:none}
 }
+
+
+/* Phase 37 — Order Experience 2.0 */
+.order-filter-tabs{display:flex;gap:6px;align-items:center;margin:18px 0;padding:5px;border:1px solid var(--line);background:#fff;width:max-content;max-width:100%;overflow-x:auto}
+.order-filter-tabs a{padding:9px 13px;color:var(--muted);font-size:8px;text-transform:uppercase;letter-spacing:.12em;white-space:nowrap}
+.order-filter-tabs a.active{background:#111;color:#fff}
+.orders-filter-empty{margin-top:12px}
+.order-status-active{border-color:#b8b1a5;background:#f4f1eb}
+.order-status-positive{border-color:#b8cbbd;background:#edf5ef}
+.order-status-negative{border-color:#d5b8b2;background:#f7efed}
+.order-primary-actions{display:flex;align-items:center;gap:10px;margin:18px 0}
+.order-primary-actions .order-actions{margin:0}
+.reorder-button{display:inline-flex;align-items:center;justify-content:center;gap:8px}
+@media(max-width:560px){
+ .order-filter-tabs{width:100%}
+ .order-filter-tabs a{flex:1;text-align:center;padding:10px 9px}
+ .order-primary-actions{align-items:stretch;flex-direction:column}
+ .order-primary-actions .order-actions{width:100%}
+ .order-primary-actions .reorder-button{width:100%}
+}

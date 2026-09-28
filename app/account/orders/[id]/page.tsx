@@ -6,8 +6,6 @@ import OrderActions from '@/components/OrderActions';
 
 function money(value:number,currency='INR'){return new Intl.NumberFormat('en-IN',{style:'currency',currency}).format(value);}
 function date(value:string){return new Intl.DateTimeFormat('en-IN',{day:'2-digit',month:'long',year:'numeric'}).format(new Date(value));}
-function label(status:string){return status.replaceAll('_',' ').replace(/\b\w/g,(m)=>m.toUpperCase());}
-
 const lifecycle=[
   {key:'pending_payment',title:'Order placed',copy:'Your order has been saved and is waiting for payment.'},
   {key:'paid',title:'Payment confirmed',copy:'Payment has been confirmed for this order.'},
@@ -30,7 +28,7 @@ export default async function OrderDetailPage({params}:{params:Promise<{id:strin
 
   const {data:order}=await supabase.from('orders').select('id,order_number,status,currency,subtotal,shipping,total,email,created_at,shipping_name,shipping_phone,shipping_line1,shipping_line2,shipping_landmark,shipping_city,shipping_state,shipping_pincode,coupon_code,discount').eq('id',id).eq('user_id',user.id).maybeSingle();
   if(!order) notFound();
-  const {data:items}=await supabase.from('order_items').select('id,title,price,quantity,image,color,size').eq('order_id',order.id).order('created_at',{ascending:true});
+  const {data:items}=await supabase.from('order_items').select('id,product_id,title,price,quantity,image,color,size').eq('order_id',order.id).order('created_at',{ascending:true});
 
   return <main className="account-page orders-page">
     <div className="account-shell order-detail">
