@@ -49,3 +49,8 @@ test('fuzzy autocomplete preserves category and label suggestion types', () => {
     { type:'category', value:'Hoodies' }
   ]);
 });
+
+test('empty search returns the full catalog unchanged', () => {
+  assert.deepEqual(searchProducts(products, '').map(p => p.id), ['1','2','3']);
+  assert.deepEqual(searchProducts(products, '   ').map(p => p.id), ['1','2','3']);
+});
