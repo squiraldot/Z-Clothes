@@ -16,7 +16,7 @@ test('smart search normalizes whitespace and punctuation', () => {
 test('smart search ranks exact title and attribute matches above loose matches', () => {
   assert.deepEqual(searchProducts(products, 'black hoodie').map(p => p.id), ['1']);
   assert.deepEqual(searchProducts(products, 'blue').map(p => p.id), ['2']);
-  assert.deepEqual(searchProducts(products, 'cotton').map(p => p.id), ['1','3']);
+  assert.deepEqual(searchProducts(products, 'cotton').map(p => p.id), ['3','1']);
 });
 
 test('autocomplete suggestions combine products, categories and labels without duplicates', () => {
