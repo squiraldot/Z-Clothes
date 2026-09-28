@@ -7,6 +7,7 @@ import {
   changeCartQuantity,
   removeCartItem,
   restoreCartItem,
+  cartRevisionChanged,
 } from '../lib/cart-experience.ts';
 
 const item = (productId, quantity, price = 100) => ({
@@ -57,4 +58,9 @@ test('restoring an item with an invalid index appends it safely', () => {
   const removed = item('b', 1);
   const restored = restoreCartItem(items, removed, 99);
   assert.deepEqual(restored.map((x) => x.productId), ['a', 'b']);
+});
+
+test('cart revision guard detects a local mutation during remote sync', () => {
+  assert.equal(cartRevisionChanged(4, 5), true);
+  assert.equal(cartRevisionChanged(4, 4), false);
 });
