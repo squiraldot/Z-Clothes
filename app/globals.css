@@ -1249,3 +1249,11 @@ html,body{max-width:100%;overflow-x:hidden}
 .review-date{display:block;margin-top:12px;color:var(--muted);font-size:9px}
 .review-form-meta{display:flex;justify-content:space-between;gap:12px;margin:-2px 0 12px;color:var(--muted);font-size:9px}
 @media(max-width:700px){.review-controls{align-items:stretch;flex-direction:column;gap:14px}.review-distribution{width:100%;min-width:0}.review-rating-row{grid-template-columns:28px minmax(80px,1fr) 24px}.review-sort{justify-content:space-between}.review-sort select{flex:1}}
+
+
+/* Phase 39 — Smart Search */
+.search-suggestions{display:grid;gap:4px;margin-top:14px;max-height:320px;overflow:auto}
+.search-suggestions button{display:flex;align-items:center;gap:10px;width:100%;padding:11px 12px;border:1px solid transparent;background:#fff;color:#111;text-align:left;cursor:pointer}
+.search-suggestions button:hover,.search-suggestions button:focus-visible{border-color:var(--line);background:#f7f4ef;outline:none}
+.search-suggestions button span{min-width:62px;color:var(--muted);font-size:8px;letter-spacing:.1em;text-transform:uppercase}
+.search-suggestions-empty{padding:12px;color:var(--muted);font-size:11px}
