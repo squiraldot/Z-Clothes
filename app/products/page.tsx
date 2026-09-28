@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { CaretDown, Funnel, MagnifyingGlass, X } from '@phosphor-icons/react';
 import { ProductCard } from '@/components/ProductCard';
 import type { Product } from '@/lib/types';
+import { searchProducts } from '@/lib/smart-search';
 
 const SORTS=['Newest','Price: Low','Price: High','Name: A–Z'] as const;
 
@@ -55,20 +56,15 @@ export default function ProductsPage(){
   },[q,category,sort,sizes,colors,maxPrice,highestPrice]);
 
   const filtered=useMemo(()=>{
-    const needle=q.trim().toLowerCase();
-    return products.filter(p=>{
-      const haystack=[p.title,p.category,p.description,...(p.labels||[]),...(p.colors||[])].join(' ').toLowerCase();
-      return (!needle||haystack.includes(needle))
-        &&(category==='All'||p.category===category)
-        &&(!sizes.length||sizes.some(size=>(p.sizes||[]).includes(size)))
-        &&(!colors.length||colors.some(color=>(p.colors||[]).includes(color)))
-        &&(!maxPrice||p.price<=maxPrice);
-    }).sort((a,b)=>{
-      if(sort==='Price: Low')return a.price-b.price;
-      if(sort==='Price: High')return b.price-a.price;
-      if(sort==='Name: A–Z')return a.title.localeCompare(b.title);
-      return new Date(b.published||0).getTime()-new Date(a.published||0).getTime();
-    });
+    let result = searchProducts(products, q);
+    if (category !== 'All') result = result.filter(p => p.category === category);
+    if (sizes.length) result = result.filter(p => sizes.some(size => (p.sizes || []).includes(size)));
+    if (colors.length) result = result.filter(p => colors.some(color => (p.colors || []).includes(color)));
+    if (maxPrice) result = result.filter(p => p.price <= maxPrice);
+    if (sort === 'Price: Low') result.sort((a,b) => a.price - b.price);
+    else if (sort === 'Price: High') result.sort((a,b) => b.price - a.price);
+    else if (sort === 'Name: A–Z') result.sort((a,b) => a.title.localeCompare(b.title));
+    return result;
   },[products,q,category,sort,sizes,colors,maxPrice]);
 
   const activeCount=(category!=='All'?1:0)+sizes.length+colors.length+(maxPrice&&maxPrice<highestPrice?1:0);
