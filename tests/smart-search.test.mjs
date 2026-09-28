@@ -29,3 +29,8 @@ test('autocomplete suggestions combine products, categories and labels without d
     { type:'category', value:'Hoodies' }
   ]);
 });
+
+test('products page search must keep ordinary text queries intact', () => {
+  assert.equal(normalizeSearchQuery('T-Shirts'), 't shirts');
+  assert.deepEqual(searchProducts(products, 'T-Shirts').map(p => p.id), ['3']);
+});
