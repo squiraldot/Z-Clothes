@@ -1,3 +1,8 @@
+.heading{margin:28px 0 0}
+.title{display:flex;align-items:flex-start;gap:14px;margin-top:12px}
+.icon{width:46px;height:46px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;flex:0 0 auto}
+.title h1{font-family:Georgia,serif;font-size:54px;font-weight:400;letter-spacing:-.05em;line-height:.95;margin:0}
+.title p{max-width:620px;color:var(--muted);font-size:12px;line-height:1.65;margin:13px 0 0}
 .form{display:grid;gap:18px;margin-top:28px}
 .fieldset{border:1px solid var(--line);background:#fff;padding:24px;margin:0}
 .fieldset legend{font-family:Georgia,serif;font-size:28px;font-weight:400;letter-spacing:-.03em;padding:0 8px;margin-left:-8px}
@@ -23,4 +28,4 @@
 .message{font-size:10px;margin:0;padding:11px 13px;border:1px solid var(--line);background:#fff}
 .actions{display:flex;gap:9px;align-items:center}
 .actions .btn{justify-content:center}
-@media(max-width:650px){.frequencyGrid{grid-template-columns:1fr}.fieldset{padding:19px}.fieldset legend{font-size:24px}.actions{display:grid;grid-template-columns:1fr}.actions .btn{width:100%}}
+@media(max-width:650px){.title h1{font-size:40px}.title p{font-size:11px}.frequencyGrid{grid-template-columns:1fr}.fieldset{padding:19px}.fieldset legend{font-size:24px}.actions{display:grid;grid-template-columns:1fr}.actions .btn{width:100%}}
