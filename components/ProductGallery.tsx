@@ -9,6 +9,7 @@ export function ProductGallery({ title, category, images }: { title:string; cate
   const [active, setActive] = useState(0);
   const [zoomed, setZoomed] = useState(false);
   const pointerStart = useRef<number | null>(null);
+  const swiped = useRef(false);
   const current = list[active] || list[0];
 
   useEffect(() => {
@@ -31,8 +32,8 @@ export function ProductGallery({ title, category, images }: { title:string; cate
 
   return (
     <div className="gallery">
-      <div className="gallery-main-wrap" onPointerDown={(event) => { pointerStart.current = event.clientX; }} onPointerUp={(event) => { const start = pointerStart.current; pointerStart.current = null; if (start === null || list.length < 2) return; const delta = event.clientX - start; if (Math.abs(delta) > 45) { if (delta < 0) next(); else previous(); } }}>
-        <button type="button" className="gallery-zoom-trigger" onClick={() => setZoomed(true)} aria-label="Open product image viewer">
+      <div className="gallery-main-wrap" onPointerDown={(event) => { pointerStart.current = event.clientX; swiped.current = false; }} onPointerUp={(event) => { const start = pointerStart.current; pointerStart.current = null; if (start === null || list.length < 2) return; const delta = event.clientX - start; if (Math.abs(delta) > 45) { swiped.current = true; if (delta < 0) next(); else previous(); } }} onClick={() => { if (swiped.current) swiped.current = false; }}>
+        <button type="button" className="gallery-zoom-trigger" onClick={() => { if (swiped.current) { swiped.current = false; return; } setZoomed(true); }} aria-label="Open product image viewer">
           <Image className="main-product-image" src={current} alt={title} fill priority sizes="(max-width: 900px) 100vw, 55vw" quality={85} />
           <span className="gallery-label">Z-CLOTHES / {category}</span>
         </button>

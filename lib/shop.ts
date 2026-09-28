@@ -1,4 +1,5 @@
 import type { Product } from '@/lib/types';
+import { addQuantities } from './cart-quantity';
 
 export type CartItem = {
   productId: string;
@@ -51,7 +52,7 @@ export function addToCart(product: Product, options?: { color?: string; size?: s
   };
   const key = cartItemKey(nextItem);
   const existing = current.find((item) => cartItemKey(item) === key);
-  if (existing) existing.quantity += 1;
+  if (existing) existing.quantity = addQuantities(existing.quantity, nextItem.quantity);
   else current.push(nextItem);
   writeCart(current);
 }
