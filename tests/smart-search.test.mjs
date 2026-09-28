@@ -19,6 +19,10 @@ test('smart search ranks exact title and attribute matches above loose matches',
   assert.deepEqual(searchProducts(products, 'cotton').map(p => p.id), ['3','1']);
 });
 
+test('autocomplete suggests a close product when the query has a small typo', () => {
+  assert.equal(getSearchSuggestions(products, 'hoodi').at(0)?.value, 'Oversized Black Hoodie');
+});
+
 test('autocomplete suggestions combine products, categories and labels without duplicates', () => {
   assert.deepEqual(getSearchSuggestions(products, 'hood'), [
     { type:'product', value:'Oversized Black Hoodie' },
