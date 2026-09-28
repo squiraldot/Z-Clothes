@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, Bell, Heart, MapPin, Package, UserCircle } from '@phosphor-icons/react/dist/ssr';
+import { ArrowRight, Bell, Heart, MapPin, Package, SlidersHorizontal, UserCircle } from '@phosphor-icons/react/dist/ssr';
 import { redirect } from 'next/navigation';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { AccountActions } from '@/components/AccountActions';
