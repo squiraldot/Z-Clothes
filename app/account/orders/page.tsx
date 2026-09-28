@@ -9,9 +9,6 @@ function money(value:number,currency='INR'){
 function date(value:string){
   return new Intl.DateTimeFormat('en-IN',{day:'2-digit',month:'short',year:'numeric'}).format(new Date(value));
 }
-function label(status:string){
-  return status.replaceAll('_',' ').replace(/\b\w/g,(m)=>m.toUpperCase());
-}
 
 export default async function OrdersPage(){
   const supabase=await createSupabaseServerClient();
