@@ -10,6 +10,18 @@ export function getSearchTokens(query: string) {
   return normalizeSearchQuery(query).split(' ').filter(Boolean);
 }
 
+function editDistance(a: string, b: string) {
+  const prev = Array.from({ length: b.length + 1 }, (_, index) => index);
+  for (let i = 1; i <= a.length; i += 1) {
+    const current = [i];
+    for (let j = 1; j <= b.length; j += 1) {
+      current[j] = Math.min(current[j - 1] + 1, prev[j] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    }
+    for (let j = 0; j <= b.length; j += 1) prev[j] = current[j];
+  }
+  return prev[b.length];
+}
+
 function scoreProduct(product: Product, tokens: string[], query: string) {
   const title = product.title.toLowerCase();
   const category = product.category.toLowerCase();
@@ -55,7 +67,16 @@ export function getSearchSuggestions(products: Product[], query: string, limit =
     seen.add(key); result.push({ type, value });
   };
 
-  for (const product of searchProducts(products, normalized).slice(0, 4)) add('product', product.title);
+  const direct = searchProducts(products, normalized);
+  for (const product of direct.slice(0, 4)) add('product', product.title);
+  if (!direct.length) {
+    const candidates = products.flatMap((product) => [product.title, product.category, ...(product.labels || [])]);
+    const fuzzy = [...new Set(candidates)].filter((value) => {
+      const candidate = normalizeSearchQuery(value);
+      return getSearchTokens(normalized).some((token) => candidate.split(' ').some((word) => word.length >= 4 && editDistance(token, word) <= 2));
+    });
+    for (const value of fuzzy.slice(0, 4)) add('product', value);
+  }
   for (const category of [...new Set(products.map((p) => p.category).filter(Boolean))]) {
     if (category.toLowerCase().includes(normalized)) add('category', category);
   }
