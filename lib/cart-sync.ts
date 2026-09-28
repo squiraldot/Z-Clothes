@@ -1,5 +1,5 @@
 import type { CartItem } from '@/lib/shop';
-import { cartItemKey, readCart, setCart } from '@/lib/shop';
+import { cartItemKey, readCart, readCartRevision, setCart } from '@/lib/shop';
 import { createSupabaseBrowserClient } from '@/lib/supabase/browser';
 
 let cartQueue: Promise<unknown> = Promise.resolve();
@@ -45,8 +45,11 @@ export async function syncCart() {
     const user = userData.user;
     if (!user) return readCart();
 
+    const syncRevision = readCartRevision();
     const { data: remoteRows, error: readError } = await supabase.from('cart_items').select('*').eq('user_id', user.id);
     if (readError) throw readError;
+
+    if (readCartRevision() !== syncRevision) return readCart();
 
     const local = readCart();
     const localKeys = new Set(local.map(cartItemKey));
