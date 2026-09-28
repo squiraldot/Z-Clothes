@@ -70,6 +70,7 @@ export function searchProducts(products: Product[], query: string) {
   const normalized = normalizeSearchQuery(query);
   const { textQuery, size, maxPrice } = parseSearchQualifiers(normalized);
   const tokens = getSearchTokens(textQuery);
+  if (!tokens.length && size === undefined && maxPrice === undefined) return [...products];
 
   return products
     .map((product) => ({
